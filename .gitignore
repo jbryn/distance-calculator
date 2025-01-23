@@ -1,0 +1,12 @@
+# Backend
+/api/vendor
+/api/.env
+/api/logs/*
+
+# Frontend
+/client/node_modules
+/client/dist
+/client/.env
+
+#General
+.DS_Store
