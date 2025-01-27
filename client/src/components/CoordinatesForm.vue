@@ -2,9 +2,11 @@
 import { ref, computed } from 'vue'
 import type { Coordinates, ValidationErrors } from '../types/coordinates'
 import { useCoordinateValidation } from '../composables/useCoordinateValidation'
+import { useDistance } from '../composables/useDistance'
 import CoordinateInput from './CoordinateInput.vue'
 
 const { validatePoint } = useCoordinateValidation()
+const { distance, isLoading, apiError, calculateDistance } = useDistance()
 
 const point1 = ref<Coordinates>({
   latitude: 0,
@@ -18,9 +20,6 @@ const point2 = ref<Coordinates>({
 
 const point1Errors = ref<ValidationErrors>({})
 const point2Errors = ref<ValidationErrors>({})
-const distance = ref<number | null>(null)
-const isLoading = ref(false)
-const apiError = ref<string | null>(null)
 
 const isFormValid = computed(() => {
   const p1Errors = validatePoint(point1.value)
@@ -29,38 +28,6 @@ const isFormValid = computed(() => {
   return !Object.values(p1Errors).some(error => error !== undefined) &&
          !Object.values(p2Errors).some(error => error !== undefined)
 })
-
-const calculateDistance = async () => {
-  try {
-    const response = await fetch('http://localhost:8080/api/calculate-distance', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        lat1: point1.value.latitude,
-        lon1: point1.value.longitude,
-        lat2: point2.value.latitude,
-        lon2: point2.value.longitude
-      })
-    })
-
-    if (!response.ok) {
-      throw new Error('Failed to calculate distance')
-    }
-
-    const data = await response.json()
-    
-    if (data.status !== 'success' || !data.data?.kilometers) {
-      throw new Error('Invalid response format')
-    }
-
-    return data.data.kilometers
-  } catch (error) {
-    console.error('API Error:', error)
-    throw new Error('Failed to calculate distance')
-  }
-}
 
 const handleSubmit = async () => {
   point1Errors.value = validatePoint(point1.value)
@@ -72,7 +39,7 @@ const handleSubmit = async () => {
     distance.value = null
     
     try {
-      distance.value = await calculateDistance()
+      distance.value = await calculateDistance(point1.value, point2.value)
     } catch (error) {
       apiError.value = error instanceof Error ? error.message : 'An error occurred'
     } finally {
