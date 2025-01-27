@@ -8,31 +8,35 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-// Ładowanie zmiennych środowiskowych
+// Loading environment variables
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 
-// Konfiguracja kontenera DI
+// DI container configuration
 $containerBuilder = new ContainerBuilder();
 $containerBuilder->addDefinitions(__DIR__ . '/../src/Config/dependencies.php');
 $container = $containerBuilder->build();
 
-// Utworzenie aplikacji
+// Creating application
 $app = AppFactory::createFromContainer($container);
 
-// Dodanie middleware
+// Adding middleware
 $app->addBodyParsingMiddleware();
 
-// Obsługa CORS
+// CORS handling
 $app->add(function (Request $request, $handler) {
     $response = $handler->handle($request);
     return $response
-        ->withHeader('Access-Control-Allow-Origin', '*')
+        ->withHeader('Access-Control-Allow-Origin', 'http://localhost:5173')
         ->withHeader('Access-Control-Allow-Headers', 'Content-Type')
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
 });
 
-// Obsługa błędów
+// Handle OPTIONS preflight requests
+$app->options('/{routes:.+}', function (Request $request, Response $response) {
+    return $response;
+});
+
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 $errorMiddleware->setDefaultErrorHandler(function (
     Request $request,
@@ -48,13 +52,13 @@ $errorMiddleware->setDefaultErrorHandler(function (
         ->withStatus(400);
 });
 
-// Trasy
+
 $app->post('/api/calculate-distance', [
     \Jbryn\DistanceCalculator\Controller\DistanceController::class,
     'calculate'
 ]);
 
-// Trasa testowa
+
 $app->get('/', function (Request $request, Response $response) {
     $response->getBody()->write(json_encode(['status' => 'API is working!']));
     return $response->withHeader('Content-Type', 'application/json');

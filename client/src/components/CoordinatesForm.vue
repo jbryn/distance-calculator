@@ -18,6 +18,9 @@ const point2 = ref<Coordinates>({
 
 const point1Errors = ref<ValidationErrors>({})
 const point2Errors = ref<ValidationErrors>({})
+const distance = ref<number | null>(null)
+const isLoading = ref(false)
+const apiError = ref<string | null>(null)
 
 const isFormValid = computed(() => {
   const p1Errors = validatePoint(point1.value)
@@ -27,13 +30,47 @@ const isFormValid = computed(() => {
          !Object.values(p2Errors).some(error => error !== undefined)
 })
 
-const handleSubmit = () => {
+const calculateDistance = async () => {
+  try {
+    const response = await fetch('http://localhost:8080/api/calculate-distance', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        lat1: point1.value.latitude,
+        lon1: point1.value.longitude,
+        lat2: point2.value.latitude,
+        lon2: point2.value.longitude
+      })
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to calculate distance')
+    }
+
+    const data = await response.json()
+    return data.distance
+  } catch (error) {
+    throw new Error('Failed to calculate distance')
+  }
+}
+
+const handleSubmit = async () => {
   point1Errors.value = validatePoint(point1.value)
   point2Errors.value = validatePoint(point2.value)
   
   if (isFormValid.value) {
-    console.log('Point 1:', point1.value)
-    console.log('Point 2:', point2.value)
+    isLoading.value = true
+    apiError.value = null
+    
+    try {
+      distance.value = await calculateDistance()
+    } catch (error) {
+      apiError.value = error instanceof Error ? error.message : 'An error occurred'
+    } finally {
+      isLoading.value = false
+    }
   }
 }
 
@@ -63,7 +100,20 @@ const handleInput = (pointNumber: 1 | 2) => {
         :onInput="() => handleInput(2)"
       />
 
-      <button type="submit" :disabled="!isFormValid">Submit</button>
+      <button 
+        type="submit" 
+        :disabled="!isFormValid || isLoading"
+      >
+        {{ isLoading ? 'Calculating...' : 'Calculate Distance' }}
+      </button>
+
+      <div v-if="distance !== null" class="result">
+        <p>Distance: {{ distance.toFixed(2) }} kilometers</p>
+      </div>
+
+      <div v-if="apiError" class="error">
+        {{ apiError }}
+      </div>
     </form>
   </div>
 </template>
@@ -106,6 +156,14 @@ input:invalid {
   color: #ff4444;
   font-size: 0.9em;
   margin-top: 5px;
+}
+
+.result {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f0f8f4;
+  border-radius: 4px;
+  text-align: center;
 }
 
 button {
