@@ -61,14 +61,13 @@ const formattedDistance = computed(() => {
 
 <template>
   <div class="coordinate-form">
-    <h2>Geographic Coordinates Form</h2>
-    
-    <form @submit.prevent="handleSubmit">
+    <form @submit.prevent="handleSubmit" class="form-container">
       <CoordinateInput
         :pointNumber="1"
         :coordinates="point1"
         :errors="point1Errors"
         :onInput="() => handleInput(1)"
+        marker-color="#4B7BF5"
       />
       
       <CoordinateInput
@@ -76,13 +75,16 @@ const formattedDistance = computed(() => {
         :coordinates="point2"
         :errors="point2Errors"
         :onInput="() => handleInput(2)"
+        marker-color="#22C55E"
       />
 
       <button 
         type="submit" 
         :disabled="!isFormValid || isLoading"
+        class="calculate-button"
       >
         {{ isLoading ? 'Calculating...' : 'Calculate Distance' }}
+        <span class="arrow">→</span>
       </button>
 
       <div v-if="formattedDistance" class="result">
@@ -103,63 +105,52 @@ const formattedDistance = computed(() => {
   padding: 20px;
 }
 
-.point-section {
-  margin-bottom: 20px;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+.form-container {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  padding: 24px;
 }
 
-.input-group {
-  margin-bottom: 15px;
-  display: flex;
-  flex-direction: column;
-}
-
-label {
-  margin-bottom: 5px;
-}
-
-input {
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-input:invalid {
-  border-color: #ff4444;
-}
-
-.error {
-  color: #ff4444;
-  font-size: 0.9em;
-  margin-top: 5px;
-}
-
-.result {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #f0f8f4;
-  border-radius: 4px;
-  text-align: center;
-}
-
-button {
+.calculate-button {
   width: 100%;
-  padding: 10px;
-  background-color: #42b883;
+  padding: 16px;
+  background-color: #4B7BF5;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
 }
 
-button:disabled {
-  background-color: #cccccc;
+.calculate-button:disabled {
+  background-color: #E5E7EB;
   cursor: not-allowed;
 }
 
-button:hover:not(:disabled) {
-  background-color: #3aa876;
+.calculate-button:hover:not(:disabled) {
+  background-color: #3B69E3;
+}
+
+.arrow {
+  margin-left: 8px;
+}
+
+.error {
+  color: #EF4444;
+  font-size: 0.9em;
+  margin-top: 12px;
+  text-align: center;
+}
+
+.result {
+  margin-top: 16px;
+  text-align: center;
+  font-weight: 500;
 }
 </style>
