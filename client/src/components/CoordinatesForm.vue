@@ -50,8 +50,14 @@ const calculateDistance = async () => {
     }
 
     const data = await response.json()
-    return data.distance
+    
+    if (data.status !== 'success' || !data.data?.kilometers) {
+      throw new Error('Invalid response format')
+    }
+
+    return data.data.kilometers
   } catch (error) {
+    console.error('API Error:', error)
     throw new Error('Failed to calculate distance')
   }
 }
@@ -63,6 +69,7 @@ const handleSubmit = async () => {
   if (isFormValid.value) {
     isLoading.value = true
     apiError.value = null
+    distance.value = null
     
     try {
       distance.value = await calculateDistance()
@@ -79,6 +86,10 @@ const handleInput = (pointNumber: 1 | 2) => {
   const errors = pointNumber === 1 ? point1Errors : point2Errors
   errors.value = validatePoint(point)
 }
+
+const formattedDistance = computed(() => {
+  return distance.value !== null ? distance.value.toFixed(2) : null
+})
 </script>
 
 <template>
@@ -107,8 +118,8 @@ const handleInput = (pointNumber: 1 | 2) => {
         {{ isLoading ? 'Calculating...' : 'Calculate Distance' }}
       </button>
 
-      <div v-if="distance !== null" class="result">
-        <p>Distance: {{ distance.toFixed(2) }} kilometers</p>
+      <div v-if="formattedDistance" class="result">
+        <p>Distance: {{ formattedDistance }} kilometers</p>
       </div>
 
       <div v-if="apiError" class="error">
