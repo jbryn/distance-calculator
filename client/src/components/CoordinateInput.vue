@@ -27,11 +27,8 @@ defineProps<{
         <label :for="'lat' + pointNumber">Latitude</label>
         <input
           :id="'lat' + pointNumber"
-          type="number"
+          type="text"
           v-model="coordinates.latitude"
-          step="0.000001"
-          min="-90"
-          max="90"
           required
           @input="onInput"
           :placeholder="'e.g. ' + (pointNumber === 1 ? '51.5074' : '48.8566')"
@@ -45,11 +42,8 @@ defineProps<{
         <label :for="'lng' + pointNumber">Longitude</label>
         <input
           :id="'lng' + pointNumber"
-          type="number"
+          type="text"
           v-model="coordinates.longitude"
-          step="0.000001"
-          min="-180"
-          max="180"
           required
           @input="onInput"
           :placeholder="'e.g. ' + (pointNumber === 1 ? '-0.1278' : '2.3522')"

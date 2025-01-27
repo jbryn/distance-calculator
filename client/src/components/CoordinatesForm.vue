@@ -9,13 +9,13 @@ const { validatePoint } = useCoordinateValidation()
 const { distance, isLoading, apiError, calculateDistance } = useDistance()
 
 const point1 = ref<Coordinates>({
-  latitude: 0,
-  longitude: 0
+  latitude: '',
+  longitude: ''
 })
 
 const point2 = ref<Coordinates>({
-  latitude: 0,
-  longitude: 0
+  latitude: '',
+  longitude: ''
 })
 
 const point1Errors = ref<ValidationErrors>({})

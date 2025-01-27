@@ -1,6 +1,6 @@
 export interface Coordinates {
-    latitude: number
-    longitude: number
+    latitude: string
+    longitude: string
   }
   
   export interface ValidationErrors {

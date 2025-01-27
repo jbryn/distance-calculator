@@ -14,10 +14,10 @@ export function useDistance() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          lat1: point1.latitude,
-          lon1: point1.longitude,
-          lat2: point2.latitude,
-          lon2: point2.longitude
+          lat1: Number(point1.latitude),
+          lon1: Number(point1.longitude),
+          lat2: Number(point2.latitude),
+          lon2: Number(point2.longitude)
         })
       })
 
