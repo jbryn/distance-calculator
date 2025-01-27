@@ -13,11 +13,15 @@ class Validator
         
         foreach ($required as $field) {
             if (!isset($data[$field])) {
-                throw new ValidationException("Brak wymaganego pola: {$field}");
+                throw new ValidationException("Missing required field: {$field}");
             }
             
             if (!is_numeric($data[$field])) {
-                throw new ValidationException("Pole {$field} musi być liczbą");
+                throw new ValidationException("Field {$field} must be a number");
+            }
+
+            if (is_int($data[$field]) || !str_contains((string)$data[$field], '.')) {
+                throw new ValidationException("Field {$field} must be a floating-point number");
             }
         }
         
@@ -31,7 +35,7 @@ class Validator
     {
         if ($lat < -90 || $lat > 90) {
             throw new ValidationException(
-                "Nieprawidłowa szerokość geograficzna dla {$field}. Wartość musi być między -90 a 90 stopni"
+                "Invalid latitude for {$field}. Value must be between -90 and 90 degrees"
             );
         }
     }
@@ -40,7 +44,7 @@ class Validator
     {
         if ($lon < -180 || $lon > 180) {
             throw new ValidationException(
-                "Nieprawidłowa długość geograficzna dla {$field}. Wartość musi być między -180 a 180 stopni"
+                "Invalid longitude for {$field}. Value must be between -180 and 180 degrees"
             );
         }
     }

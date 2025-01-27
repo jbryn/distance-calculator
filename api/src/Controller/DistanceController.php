@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Jbryn\DistanceCalculator\Service\DistanceCalculator;
 use Jbryn\DistanceCalculator\Service\Validator;
+use Jbryn\DistanceCalculator\Exception\ValidationException;
 
 class DistanceController
 {
@@ -17,24 +18,36 @@ class DistanceController
 
     public function calculate(Request $request, Response $response): Response
     {
-        $data = $request->getParsedBody();
+        try {
+            $data = $request->getParsedBody();
+            
+            $this->validator->validate($data);
+            
+            $result = $this->calculator->calculate(
+                $data['lat1'],
+                $data['lon1'],
+                $data['lat2'],
+                $data['lon2']
+            );
+            
+            $response->getBody()->write(json_encode([
+                'status' => 'success',
+                'data' => $result
+            ]));
+            
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(200);
                 
-        $this->validator->validate($data);
-                
-        $result = $this->calculator->calculate(
-            $data['lat1'],
-            $data['lon1'],
-            $data['lat2'],
-            $data['lon2']
-        );
-        
-        $response->getBody()->write(json_encode([
-            'status' => 'success',
-            'data' => $result
-        ]));
-        
-        return $response
-            ->withHeader('Content-Type', 'application/json')
-            ->withStatus(200);
+        } catch (ValidationException $e) {
+            $response->getBody()->write(json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]));
+            
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(400);
+        }
     }
 }
