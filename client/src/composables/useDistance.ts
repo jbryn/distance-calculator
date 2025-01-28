@@ -20,20 +20,23 @@ export function useDistance() {
           lon2: Number(point2.longitude)
         })
       })
-
+  
       if (!response.ok) {
         throw new Error('Failed to calculate distance')
       }
-
+  
       const data = await response.json()
       
       if (data.status !== 'success' || !data.data?.kilometers) {
         throw new Error('Invalid response format')
       }
-
+  
       return data.data.kilometers
     } catch (error) {
       console.error('API Error:', error)
+      if (error instanceof Error) {
+        throw error
+      }
       throw new Error('Failed to calculate distance')
     }
   }
