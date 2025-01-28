@@ -1,4 +1,3 @@
-// useDistance.test.ts
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { useDistance } from '../useDistance'
 import type { Coordinates } from '../../types/coordinates'
