@@ -55,7 +55,13 @@ const handleBlur = (pointNumber: 1 | 2) => {
 }
 
 const formattedDistance = computed(() => {
-  return distance.value !== null ? distance.value.toFixed(2) : null
+  if (!distance.value) return null
+  const kilometers = (distance.value / 1000).toFixed(2)
+  const meters = distance.value.toFixed(2)
+  return {
+    kilometers,
+    meters
+  }
 })
 </script>
 
@@ -88,7 +94,7 @@ const formattedDistance = computed(() => {
       </button>
 
       <div v-if="formattedDistance" class="result">
-        <p>Distance: {{ formattedDistance }} kilometers</p>
+        <p>Distance: {{ formattedDistance.kilometers }} kilometers ({{ formattedDistance.meters }} meters)</p>
       </div>
 
       <div v-if="apiError" class="error">
@@ -154,5 +160,6 @@ const formattedDistance = computed(() => {
   margin-top: 16px;
   text-align: center;
   font-weight: 500;
+  color: black;
 }
 </style>
