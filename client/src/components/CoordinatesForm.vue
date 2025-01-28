@@ -48,7 +48,7 @@ const handleSubmit = async () => {
   }
 }
 
-const handleInput = (pointNumber: 1 | 2) => {
+const handleBlur = (pointNumber: 1 | 2) => {
   const point = pointNumber === 1 ? point1.value : point2.value
   const errors = pointNumber === 1 ? point1Errors : point2Errors
   errors.value = validatePoint(point)
@@ -66,7 +66,7 @@ const formattedDistance = computed(() => {
         :pointNumber="1"
         :coordinates="point1"
         :errors="point1Errors"
-        :onInput="() => handleInput(1)"
+        :onBlur="() => handleBlur(1)"
         marker-color="#4B7BF5"
       />
       
@@ -74,7 +74,7 @@ const formattedDistance = computed(() => {
         :pointNumber="2"
         :coordinates="point2"
         :errors="point2Errors"
-        :onInput="() => handleInput(2)"
+        :onBlur="() => handleBlur(2)"
         marker-color="#22C55E"
       />
 

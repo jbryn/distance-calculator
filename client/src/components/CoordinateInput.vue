@@ -5,7 +5,7 @@ defineProps<{
   pointNumber: number
   coordinates: Coordinates
   errors: ValidationErrors
-  onInput: () => void
+  onBlur: () => void
   markerColor: string
 }>()
 </script>
@@ -30,7 +30,7 @@ defineProps<{
           type="text"
           v-model="coordinates.latitude"
           required
-          @input="onInput"
+          @blur="onBlur"
           :placeholder="'e.g. ' + (pointNumber === 1 ? '51.5074' : '48.8566')"
         />
         <span class="error" v-if="errors.latitude">
@@ -45,7 +45,7 @@ defineProps<{
           type="text"
           v-model="coordinates.longitude"
           required
-          @input="onInput"
+          @blur="onBlur"
           :placeholder="'e.g. ' + (pointNumber === 1 ? '-0.1278' : '2.3522')"
         />
         <span class="error" v-if="errors.longitude">
