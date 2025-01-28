@@ -59,6 +59,9 @@ defineProps<{
 <style scoped>
 .point-container {
   margin-bottom: 24px;
+  height: 160px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .point-header {
@@ -92,13 +95,19 @@ h3 {
 
 .coordinates-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 16px;
+  height: 90px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .input-group {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 label {
@@ -128,7 +137,7 @@ input:focus {
 
 .error {
   color: #EF4444;
-  font-size: 14px;
+  font-size: 8px;
   margin-top: 4px;
 }
 </style>

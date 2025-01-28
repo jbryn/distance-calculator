@@ -100,16 +100,18 @@ const formattedDistance = computed(() => {
 
 <style scoped>
 .coordinate-form {
-  max-width: 500px;
+  width: 500px;
   margin: 0 auto;
   padding: 20px;
 }
 
 .form-container {
+  width: 100%;
   background: white;
   border-radius: 16px;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   padding: 24px;
+  box-sizing: border-box;
 }
 
 .calculate-button {
