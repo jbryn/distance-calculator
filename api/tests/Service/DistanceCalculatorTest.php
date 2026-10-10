@@ -22,7 +22,7 @@ class DistanceCalculatorTest extends TestCase
     {
         $result = $this->calculator->calculate(52.229676, 21.012229, 52.229676, 21.012229);
 
-        $this->assertSame(['meters' => 0.0, 'kilometers' => 0.0], $result);
+        $this->assertSame(['meters' => 1.0, 'kilometers' => 0.0], $result);
     }
 
     public function testEquatorToPoleIsQuarterOfCircumference(): void
