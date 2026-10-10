@@ -56,11 +56,9 @@ const handleBlur = (pointNumber: 1 | 2) => {
 
 const formattedDistance = computed(() => {
   if (!distance.value) return null
-  const kilometers = (distance.value / 1000).toFixed(2)
-  const meters = distance.value.toFixed(2)
   return {
-    kilometers,
-    meters
+    kilometers: distance.value.kilometers.toFixed(2),
+    meters: distance.value.meters.toFixed(2)
   }
 })
 </script>
@@ -106,7 +104,7 @@ const formattedDistance = computed(() => {
 
 <style scoped>
 .coordinate-form {
-  width: 500px;
+  max-width: 500px;
   margin: 0 auto;
   padding: 20px;
 }

@@ -61,7 +61,22 @@ describe('useDistance', () => {
       })
 
       const result = await calculateDistance(mockPoints[0], mockPoints[1])
-      expect(result).toBe(3.34)
+      expect(result).toEqual({ kilometers: 3.34, meters: 3335.85 })
+    })
+
+    it('returns zero distance for identical points', async () => {
+      const { calculateDistance } = useDistance()
+      
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({
+          status: 'success',
+          data: { kilometers: 0, meters: 0 }
+        })
+      })
+
+      const result = await calculateDistance(mockPoints[0], mockPoints[0])
+      expect(result).toEqual({ kilometers: 0, meters: 0 })
     })
 
     it('throws error when API response is not ok', async () => {

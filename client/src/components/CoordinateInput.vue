@@ -59,7 +59,7 @@ defineProps<{
 <style scoped>
 .point-container {
   margin-bottom: 24px;
-  height: 160px;
+  min-height: 160px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -97,7 +97,7 @@ h3 {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 16px;
-  height: 90px;
+  min-height: 90px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -137,7 +137,7 @@ input:focus {
 
 .error {
   color: #EF4444;
-  font-size: 8px;
+  font-size: 12px;
   margin-top: 4px;
 }
 </style>

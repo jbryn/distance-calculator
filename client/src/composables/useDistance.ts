@@ -1,12 +1,12 @@
 import { ref } from 'vue'
-import type { Coordinates } from '../types/coordinates'
+import type { Coordinates, DistanceResult } from '../types/coordinates'
 
 export function useDistance() {
-  const distance = ref<number | null>(null)
+  const distance = ref<DistanceResult | null>(null)
   const isLoading = ref(false)
   const apiError = ref<string | null>(null)
 
-  const calculateDistance = async (point1: Coordinates, point2: Coordinates) => {
+  const calculateDistance = async (point1: Coordinates, point2: Coordinates): Promise<DistanceResult> => {
     try {
       const response = await fetch('http://localhost:8080/api/calculate-distance', {
         method: 'POST',
@@ -27,11 +27,13 @@ export function useDistance() {
   
       const data = await response.json()
       
-      if (data.status !== 'success' || !data.data?.kilometers) {
+      const { meters, kilometers } = data.data ?? {}
+
+      if (data.status !== 'success' || typeof meters !== 'number' || typeof kilometers !== 'number') {
         throw new Error('Invalid response format')
       }
   
-      return data.data.kilometers
+      return { meters, kilometers }
     } catch (error) {
       console.error('API Error:', error)
       if (error instanceof Error) {
