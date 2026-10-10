@@ -24,10 +24,10 @@ class DistanceController
             $this->validator->validate($data);
             
             $result = $this->calculator->calculate(
-                $data['lat1'],
-                $data['lon1'],
-                $data['lat2'],
-                $data['lon2']
+                (float)$data['lat1'],
+                (float)$data['lon1'],
+                (float)$data['lat2'],
+                (float)$data['lon2']
             );
             
             $response->getBody()->write(json_encode([

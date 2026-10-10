@@ -7,3 +7,8 @@ export interface Coordinates {
     latitude?: string
     longitude?: string
   }
+
+  export interface DistanceResult {
+    meters: number
+    kilometers: number
+  }
