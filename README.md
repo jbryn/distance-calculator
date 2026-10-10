@@ -31,7 +31,7 @@ A web application that calculates the distance between two geographic points usi
 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/distance-calculator.git
+git clone https://github.com/jbryn/distance-calculator.git
 cd distance-calculator
 ```
 
@@ -129,22 +129,40 @@ curl http://localhost:8080/
 
 ```json
 {
-  "point1": {
-    "latitude": 52.229676,
-    "longitude": 21.012229
-  },
-  "point2": {
-    "latitude": 50.06465,
-    "longitude": 19.94498
-  }
+  "lat1": 52.229676,
+  "lon1": 21.012229,
+  "lat2": 50.06465,
+  "lon2": 19.94498
 }
+```
+
+Latitudes must be between -90 and 90, longitudes between -180 and 180.
+
+**Test with curl:**
+
+```bash
+curl -X POST http://localhost:8080/api/calculate-distance \
+  -H 'Content-Type: application/json' \
+  -d '{"lat1": 52.229676, "lon1": 21.012229, "lat2": 50.06465, "lon2": 19.94498}'
 ```
 
 **Example Response:**
 
 ```json
 {
-  "meters": 252849.5,
-  "kilometers": 252.8
+  "status": "success",
+  "data": {
+    "meters": 251980.37,
+    "kilometers": 251.98
+  }
+}
+```
+
+**Example Error Response (HTTP 400):**
+
+```json
+{
+  "status": "error",
+  "message": "Invalid latitude for lat1. Value must be between -90 and 90 degrees"
 }
 ```
