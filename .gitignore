@@ -2,6 +2,7 @@
 /api/vendor
 /api/.env
 /api/logs/*
+/api/.phpunit.cache
 
 # Frontend
 /client/node_modules
