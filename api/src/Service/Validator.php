@@ -7,8 +7,12 @@ use Jbryn\DistanceCalculator\Exception\ValidationException;
 
 class Validator
 {
-    public function validate(array $data): void
+    public function validate(mixed $data): void
     {
+        if (!is_array($data)) {
+            throw new ValidationException('Request body must be a JSON object');
+        }
+
         $required = ['lat1', 'lon1', 'lat2', 'lon2'];
         
         foreach ($required as $field) {
@@ -19,16 +23,12 @@ class Validator
             if (!is_numeric($data[$field])) {
                 throw new ValidationException("Field {$field} must be a number");
             }
-
-            if (is_int($data[$field]) || !str_contains((string)$data[$field], '.')) {
-                throw new ValidationException("Field {$field} must be a floating-point number");
-            }
         }
         
-        $this->validateLatitude($data['lat1'], 'lat1');
-        $this->validateLatitude($data['lat2'], 'lat2');
-        $this->validateLongitude($data['lon1'], 'lon1');
-        $this->validateLongitude($data['lon2'], 'lon2');
+        $this->validateLatitude((float)$data['lat1'], 'lat1');
+        $this->validateLatitude((float)$data['lat2'], 'lat2');
+        $this->validateLongitude((float)$data['lon1'], 'lon1');
+        $this->validateLongitude((float)$data['lon2'], 'lon2');
     }
 
     private function validateLatitude(float $lat, string $field): void
