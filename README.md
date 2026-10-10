@@ -26,6 +26,7 @@ A web application that calculates the distance between two geographic points usi
 - Vue.js 3
 - Vite as build tool
 - Vitest for testing
+- Cypress for end-to-end testing
 - TypeScript
 
 ## Setup and Installation
@@ -109,6 +110,17 @@ Run tests with coverage report:
 cd client
 npm run test:coverage
 ```
+
+### End-to-End Tests
+
+Cypress tests drive the real frontend against the real API, so both development servers must be running first (see [Running the Application](#running-the-application)).
+
+```bash
+cd client
+npm run e2e
+```
+
+Use `npm run e2e:open` to run them interactively in the Cypress app.
 
 ## API Endpoints
 
