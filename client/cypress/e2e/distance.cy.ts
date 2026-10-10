@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8080/api/calculate-distance'
+const API_URL = '**/api/calculate-distance'
 
 const fillPoint = (pointNumber: 1 | 2, latitude: string, longitude: string) => {
   cy.get(`#lat${pointNumber}`).clear().type(latitude)

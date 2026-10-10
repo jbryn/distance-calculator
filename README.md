@@ -45,19 +45,22 @@ cd api
 composer install
 ```
 
-3. Create and configure environment variables
+3. Configure environment variables (optional)
+
+Both parts run with sensible local defaults, so this step is only needed to change them.
 
 ```bash
-cd api
-touch .env
+cp api/.env.example api/.env
+cp client/.env.example client/.env
 ```
 
-Add the following variables to your `.env` file:
+| File | Variable | Default | Purpose |
+|---|---|---|---|
+| `api/.env` | `APP_DEBUG` | `false` | Include error details in API error responses |
+| `api/.env` | `CORS_ORIGIN` | `http://localhost:5173` | Frontend origin allowed to call the API |
+| `client/.env` | `VITE_API_URL` | `http://localhost:8080` | Base URL of the API |
 
-```
-APP_ENV=development
-APP_DEBUG=true
-```
+If you run the API or the frontend on a different port, update the matching variable on the other side.
 
 4. Frontend setup
 

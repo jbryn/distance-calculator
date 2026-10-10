@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { useDistance } from '../useDistance'
 import type { Coordinates } from '../../types/coordinates'
 
@@ -16,6 +16,10 @@ describe('useDistance', () => {
     // Reset all mocks before each test
     vi.clearAllMocks()
     mockFetch.mockReset()
+  })
+
+  afterEach(() => {
+    vi.unstubAllEnvs()
   })
 
   describe('calculateDistance', () => {
@@ -47,6 +51,23 @@ describe('useDistance', () => {
           })
         }
       )
+    })
+
+    it('calls the API URL configured in VITE_API_URL', async () => {
+      vi.stubEnv('VITE_API_URL', 'https://api.example.com/')
+      const { calculateDistance } = useDistance()
+      
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({
+          status: 'success',
+          data: { kilometers: 3.34, meters: 3335.85 }
+        })
+      })
+
+      await calculateDistance(mockPoints[0], mockPoints[1])
+
+      expect(mockFetch.mock.calls[0][0]).toBe('https://api.example.com/api/calculate-distance')
     })
 
     it('returns correct distance on successful API call', async () => {
