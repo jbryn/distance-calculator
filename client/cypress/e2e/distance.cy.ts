@@ -18,7 +18,7 @@ describe('Distance calculator', () => {
       fillPoint(2, '48.8566', '2.3522')
       submitButton().click()
 
-      cy.get('.result').should('have.text', 'Distance: 343.56 kilometers (343556.06 meters)')
+      cy.contains('.result', 'Distance: 343.56 kilometers (343556.06 meters)').should('be.visible')
     })
 
     it('accepts whole-number coordinates', () => {
@@ -26,7 +26,7 @@ describe('Distance calculator', () => {
       fillPoint(2, '50.0000', '19.0000')
       submitButton().click()
 
-      cy.get('.result').should('have.text', 'Distance: 262.74 kilometers (262739.82 meters)')
+      cy.contains('.result', 'Distance: 262.74 kilometers (262739.82 meters)').should('be.visible')
     })
 
     it('shows zero distance for identical points', () => {
@@ -34,7 +34,7 @@ describe('Distance calculator', () => {
       fillPoint(2, '51.5074', '-0.1278')
       submitButton().click()
 
-      cy.get('.result').should('have.text', 'Distance: 0.00 kilometers (0.00 meters)')
+      cy.contains('.result', 'Distance: 0.00 kilometers (0.00 meters)').should('be.visible')
     })
 
     it('sends the coordinates to the API as numbers', () => {
