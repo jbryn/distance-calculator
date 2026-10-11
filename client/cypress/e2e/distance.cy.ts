@@ -102,7 +102,10 @@ describe('Distance calculator', () => {
     })
 
     it('shows an error when the API responds with a server error', () => {
-      cy.intercept('POST', API_URL, { statusCode: 500, body: { status: 'error', message: 'Internal server error' } })
+      cy.intercept('POST', API_URL, {
+        statusCode: 500,
+        body: { status: 'error', message: 'Internal server error' }
+      })
       submitButton().click()
 
       cy.contains('.error', 'Failed to calculate distance').should('be.visible')

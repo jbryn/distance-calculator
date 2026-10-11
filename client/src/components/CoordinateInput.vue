@@ -10,11 +10,22 @@ defineProps<{
 }>()
 </script>
 
+<!-- eslint-disable vue/no-mutating-props -- v-model writes to the coordinates prop; this component is removed in #16 -->
 <template>
   <div class="point-container">
     <div class="point-header">
       <div class="marker" :style="{ backgroundColor: markerColor }">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
           <circle cx="12" cy="10" r="3"></circle>
         </svg>
@@ -27,13 +38,13 @@ defineProps<{
         <label :for="'lat' + pointNumber">Latitude</label>
         <input
           :id="'lat' + pointNumber"
-          type="text"
           v-model="coordinates.latitude"
+          type="text"
           required
-          @blur="onBlur"
           :placeholder="'e.g. ' + (pointNumber === 1 ? '51.5074' : '48.8566')"
+          @blur="onBlur"
         />
-        <span class="error" v-if="errors.latitude">
+        <span v-if="errors.latitude" class="error">
           {{ errors.latitude }}
         </span>
       </div>
@@ -42,13 +53,13 @@ defineProps<{
         <label :for="'lng' + pointNumber">Longitude</label>
         <input
           :id="'lng' + pointNumber"
-          type="text"
           v-model="coordinates.longitude"
+          type="text"
           required
-          @blur="onBlur"
           :placeholder="'e.g. ' + (pointNumber === 1 ? '-0.1278' : '2.3522')"
+          @blur="onBlur"
         />
-        <span class="error" v-if="errors.longitude">
+        <span v-if="errors.longitude" class="error">
           {{ errors.longitude }}
         </span>
       </div>
@@ -118,7 +129,7 @@ label {
 
 input {
   padding: 12px;
-  border: 1px solid #E5E7EB;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
   font-size: 16px;
   width: 100%;
@@ -126,17 +137,17 @@ input {
 }
 
 input::placeholder {
-  color: #9CA3AF;
+  color: #9ca3af;
 }
 
 input:focus {
   outline: none;
-  border-color: #4B7BF5;
+  border-color: #4b7bf5;
   box-shadow: 0 0 0 2px rgba(75, 123, 245, 0.1);
 }
 
 .error {
-  color: #EF4444;
+  color: #ef4444;
   font-size: 12px;
   margin-top: 4px;
 }
