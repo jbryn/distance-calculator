@@ -89,6 +89,17 @@ npm run dev
 
 The frontend application will be available at `http://localhost:5173`
 
+## Code Quality
+
+| Command | Where | What it does |
+|---|---|---|
+| `composer lint` | `api/` | PHPStan static analysis (strictest level) and a PHP-CS-Fixer style check |
+| `composer format` | `api/` | Fixes PHP code style |
+| `npm run lint` | `client/` | ESLint for TypeScript and Vue |
+| `npm run format` | `client/` | Formats the client with Prettier |
+
+CI runs all the checks on every pull request.
+
 ## Testing
 
 ### Backend Tests
