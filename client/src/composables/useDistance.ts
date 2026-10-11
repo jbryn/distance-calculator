@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import type { Coordinates, DistanceResult } from '../types/coordinates'
+import { getApiUrl } from '../config'
 
 export function useDistance() {
   const distance = ref<DistanceResult | null>(null)
@@ -8,7 +9,7 @@ export function useDistance() {
 
   const calculateDistance = async (point1: Coordinates, point2: Coordinates): Promise<DistanceResult> => {
     try {
-      const response = await fetch('http://localhost:8080/api/calculate-distance', {
+      const response = await fetch(`${getApiUrl()}/api/calculate-distance`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

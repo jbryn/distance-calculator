@@ -13,7 +13,12 @@ require __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->safeLoad();
 
-$debug = filter_var($_ENV['APP_DEBUG'] ?? false, FILTER_VALIDATE_BOOLEAN);
+// Reads from the .env file or from real environment variables (e.g. in a container)
+$env = fn (string $key, string $default): string =>
+    $_ENV[$key] ?? $_SERVER[$key] ?? (getenv($key) ?: $default);
+
+$debug = filter_var($env('APP_DEBUG', 'false'), FILTER_VALIDATE_BOOLEAN);
+$corsOrigin = $env('CORS_ORIGIN', 'http://localhost:5173');
 
 // DI container configuration
 $containerBuilder = new ContainerBuilder();
@@ -55,10 +60,10 @@ $errorMiddleware->setDefaultErrorHandler(function (
 });
 
 // CORS handling (added last so it also wraps error responses)
-$app->add(function (Request $request, $handler) {
+$app->add(function (Request $request, $handler) use ($corsOrigin) {
     $response = $handler->handle($request);
     return $response
-        ->withHeader('Access-Control-Allow-Origin', 'http://localhost:5173')
+        ->withHeader('Access-Control-Allow-Origin', $corsOrigin)
         ->withHeader('Access-Control-Allow-Headers', 'Content-Type')
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
 });
