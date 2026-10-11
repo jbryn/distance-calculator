@@ -29,10 +29,24 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^10.0",
-        "symfony/var-dumper": "^6.0"
+        "symfony/var-dumper": "^6.0",
+        "phpstan/phpstan": "^2.3",
+        "friendsofphp/php-cs-fixer": "^3.95"
     },
     "scripts": {
         "test": "phpunit",
+        "analyse": "phpstan analyse --no-progress",
+        "format": "php-cs-fixer fix",
+        "format:check": "php-cs-fixer fix --dry-run --diff",
+        "lint": [
+            "@analyse",
+            "@format:check"
+        ],
         "start": "php -S localhost:8080 -t public"
+    },
+    "config": {
+        "platform": {
+            "php": "8.1.0"
+        }
     }
 }

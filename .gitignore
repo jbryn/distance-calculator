@@ -3,6 +3,7 @@
 /api/.env
 /api/logs/*
 /api/.phpunit.cache
+/api/.php-cs-fixer.cache
 
 # Frontend
 /client/node_modules
