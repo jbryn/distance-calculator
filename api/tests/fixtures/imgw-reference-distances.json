@@ -1,0 +1,1333 @@
+{
+  "meta": {
+    "generated": "2026-10-12",
+    "description": "Reference along-river distances for testing OSM-based river chainage. expectedKm = difference of IMGW 'kilometr_biegu_rzeki' (distance from the river mouth) between two gauging stations on the same river.",
+    "sources": [
+      "https://danepubliczne.imgw.pl/api/data/hydro (IMGW-PIB public data, fields lat/lon/kilometr_biegu_rzeki)"
+    ],
+    "caveats": [
+      "IMGW km is measured from the river MOUTH. It is NOT the navigational kilometrage of the Wisła (from Przemsza) or Odra (from Opawa).",
+      "Station coordinates have 4 decimals (~10 m) and mark the gauge, which usually sits on the bank, not on the centreline: snap to the river line before measuring and check snap distance (< ~150 m).",
+      "IMGW kilometrage is old and built on official hydrographic geometry; after channel regulation real length can differ by a few percent. Treat relTolerance as the acceptance band, not as an error of your code.",
+      "Tags mark pairs that are hard for OSM: lakes, reservoirs, multi-channel reaches, canals. Expect larger deviations there.",
+      "Gwda: only one IMGW gauge (Ptusza) was captured; the second endpoint is the Gwda–Noteć confluence (km 0) with approximate coordinates."
+    ],
+    "tolerancePolicy": "relTolerance 0.03 by default, 0.06 for tags: mountain, gorge, anastomosing, multi_channel, braided, lake_river, canal_ambiguity, derived_endpoint"
+  },
+  "points": [
+    {
+      "id": "149200310",
+      "name": "Grybów",
+      "river": "Biała",
+      "lat": 49.6239,
+      "lon": 20.9458,
+      "km": 75.49,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "149200330",
+      "name": "Ciężkowice",
+      "river": "Biała",
+      "lat": 49.7922,
+      "lon": 20.9736,
+      "km": 48.39,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "153220260",
+      "name": "Dębowo",
+      "river": "Biebrza",
+      "lat": 53.6097,
+      "lon": 22.9303,
+      "km": 84.1,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "153220170",
+      "name": "Osowiec",
+      "river": "Biebrza",
+      "lat": 53.4831,
+      "lon": 22.6386,
+      "km": 51.23,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "150240010",
+      "name": "Strzyżów",
+      "river": "Bug",
+      "lat": 50.8394,
+      "lon": 24.0358,
+      "km": 554.94,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152230200",
+      "name": "Zabuże",
+      "river": "Bug",
+      "lat": 52.3175,
+      "lon": 23.0489,
+      "km": 194.24,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152210090",
+      "name": "Wyszków",
+      "river": "Bug",
+      "lat": 52.5883,
+      "lon": 21.4528,
+      "km": 26.41,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "151150080",
+      "name": "Żagań",
+      "river": "Bóbr",
+      "lat": 51.6181,
+      "lon": 15.3158,
+      "km": 76.5,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152150020",
+      "name": "Stary Raduszec",
+      "river": "Bóbr",
+      "lat": 52.0364,
+      "lon": 15.0786,
+      "km": 1.96,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "149200140",
+      "name": "Sromowce Wyżne",
+      "river": "Dunajec",
+      "lat": 49.4006,
+      "lon": 20.3539,
+      "km": 171.85,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "149200160",
+      "name": "Krościenko",
+      "river": "Dunajec",
+      "lat": 49.4417,
+      "lon": 20.4294,
+      "km": 151.52,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "153160210",
+      "name": "Ptusza",
+      "river": "Gwda",
+      "lat": 53.3667,
+      "lon": 16.7964,
+      "km": 57.55,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "MOUTH:Gwda",
+      "name": "Ujście Gwdy do Noteci",
+      "river": "Gwda",
+      "lat": 53.0551,
+      "lon": 16.726,
+      "km": 0.0,
+      "source": "Wikipedia (en) infobox – confluence coordinates; km 0 by definition",
+      "coordAccuracy": "approx"
+    },
+    {
+      "id": "152230040",
+      "name": "Ploski",
+      "river": "Narew",
+      "lat": 52.9022,
+      "lon": 23.2322,
+      "km": 384.25,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "153220270",
+      "name": "Babino",
+      "river": "Narew",
+      "lat": 53.1542,
+      "lon": 22.9425,
+      "km": 299.64,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "153220070",
+      "name": "Wizna",
+      "river": "Narew",
+      "lat": 53.2008,
+      "lon": 22.4081,
+      "km": 249.76,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152180030",
+      "name": "Pakość",
+      "river": "Noteć",
+      "lat": 52.8,
+      "lon": 18.0931,
+      "km": 265.89,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "153170100",
+      "name": "Nakło-Zachód",
+      "river": "Noteć",
+      "lat": 53.1236,
+      "lon": 17.5622,
+      "km": 182.7,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "153170010",
+      "name": "Białośliwie",
+      "river": "Noteć",
+      "lat": 53.0736,
+      "lon": 17.1247,
+      "km": 149.52,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "153160170",
+      "name": "Ujście",
+      "river": "Noteć",
+      "lat": 53.0547,
+      "lon": 16.7303,
+      "km": 119.78,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152160070",
+      "name": "Czarnków",
+      "river": "Noteć",
+      "lat": 52.9083,
+      "lon": 16.5542,
+      "km": 93.58,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152150140",
+      "name": "Gościmiec",
+      "river": "Noteć",
+      "lat": 52.7756,
+      "lon": 15.6383,
+      "km": 18.38,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "150180030",
+      "name": "Koźle",
+      "river": "Odra",
+      "lat": 50.3519,
+      "lon": 18.1467,
+      "km": 657.01,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "150170290",
+      "name": "Opole - Groszowice",
+      "river": "Odra",
+      "lat": 50.6342,
+      "lon": 17.9383,
+      "km": 612.9,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "150170040",
+      "name": "Oława",
+      "river": "Odra",
+      "lat": 50.9464,
+      "lon": 17.3064,
+      "km": 544.0,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "151170030",
+      "name": "Trestno",
+      "river": "Odra",
+      "lat": 51.0822,
+      "lon": 17.1469,
+      "km": 518.41,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "151160150",
+      "name": "Malczyce",
+      "river": "Odra",
+      "lat": 51.2267,
+      "lon": 16.4897,
+      "km": 456.1,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "151160060",
+      "name": "Głogów",
+      "river": "Odra",
+      "lat": 51.6739,
+      "lon": 16.0592,
+      "km": 367.6,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152140060",
+      "name": "Kostrzyn n. Odrą",
+      "river": "Odra",
+      "lat": 52.5992,
+      "lon": 14.6106,
+      "km": 145.47,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152140020",
+      "name": "Gozdowice",
+      "river": "Odra",
+      "lat": 52.7642,
+      "lon": 14.3178,
+      "km": 117.59,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152140010",
+      "name": "Bielinek",
+      "river": "Odra",
+      "lat": 52.9292,
+      "lon": 14.1542,
+      "km": 89.17,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "153140020",
+      "name": "Widuchowa",
+      "river": "Odra",
+      "lat": 53.1225,
+      "lon": 14.3819,
+      "km": 60.83,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "153200040",
+      "name": "Tomaryny",
+      "river": "Pasłęka",
+      "lat": 53.7361,
+      "lon": 20.2067,
+      "km": 169.26,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "154190170",
+      "name": "Łozy",
+      "river": "Pasłęka",
+      "lat": 54.1947,
+      "lon": 19.9508,
+      "km": 53.86,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "149200090",
+      "name": "Dobczyce",
+      "river": "Raba",
+      "lat": 49.8836,
+      "lon": 20.0861,
+      "km": 59.65,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "149200170",
+      "name": "Proszówki",
+      "river": "Raba",
+      "lat": 49.9964,
+      "lon": 20.4383,
+      "km": 21.75,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "153150050",
+      "name": "Resko",
+      "river": "Rega",
+      "lat": 53.7728,
+      "lon": 15.3953,
+      "km": 80.61,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "154150010",
+      "name": "Trzebiatów",
+      "river": "Rega",
+      "lat": 54.0636,
+      "lon": 15.2608,
+      "km": 14.43,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "149220060",
+      "name": "Lesko",
+      "river": "San",
+      "lat": 49.4692,
+      "lon": 22.3222,
+      "km": 316.87,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "150220070",
+      "name": "Rzuchów",
+      "river": "San",
+      "lat": 50.2469,
+      "lon": 22.5019,
+      "km": 85.4,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "150210210",
+      "name": "Radomysl",
+      "river": "San",
+      "lat": 50.6736,
+      "lon": 21.9308,
+      "km": 9.71,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "149190050",
+      "name": "Rajcza",
+      "river": "Soła",
+      "lat": 49.5139,
+      "lon": 19.1164,
+      "km": 76.36,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "149190100",
+      "name": "Żywiec",
+      "river": "Soła",
+      "lat": 49.6864,
+      "lon": 19.1931,
+      "km": 50.61,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "151180080",
+      "name": "Sieradz",
+      "river": "Warta",
+      "lat": 51.6,
+      "lon": 18.7419,
+      "km": 520.82,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152180120",
+      "name": "Koło",
+      "river": "Warta",
+      "lat": 52.1953,
+      "lon": 18.6344,
+      "km": 436.93,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152170010",
+      "name": "Śrem",
+      "river": "Warta",
+      "lat": 52.0931,
+      "lon": 17.0161,
+      "km": 290.31,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152160100",
+      "name": "Oborniki",
+      "river": "Warta",
+      "lat": 52.6436,
+      "lon": 16.8136,
+      "km": 204.75,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152150110",
+      "name": "Skwierzyna",
+      "river": "Warta",
+      "lat": 52.6019,
+      "lon": 15.5003,
+      "km": 90.97,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152150040",
+      "name": "Gorzów Wielkopolski",
+      "river": "Warta",
+      "lat": 52.73,
+      "lon": 15.2531,
+      "km": 57.29,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152140070",
+      "name": "Kostrzyn n. Odrą",
+      "river": "Warta",
+      "lat": 52.5819,
+      "lon": 14.6622,
+      "km": 4.13,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "150230040",
+      "name": "Krasnystaw",
+      "river": "Wieprz",
+      "lat": 50.9853,
+      "lon": 23.1767,
+      "km": 245.97,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "151230010",
+      "name": "Trawniki",
+      "river": "Wieprz",
+      "lat": 51.1386,
+      "lon": 23.0011,
+      "km": 201.14,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "151220090",
+      "name": "Lubartów",
+      "river": "Wieprz",
+      "lat": 51.4981,
+      "lon": 22.6436,
+      "km": 112.15,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "151220010",
+      "name": "Kośmin",
+      "river": "Wieprz",
+      "lat": 51.5731,
+      "lon": 22.0014,
+      "km": 19.77,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "150210190",
+      "name": "Zawichost",
+      "river": "Wisła",
+      "lat": 50.8058,
+      "lon": 21.8631,
+      "km": 635.82,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "150210180",
+      "name": "Annopol",
+      "river": "Wisła",
+      "lat": 50.8992,
+      "lon": 21.8322,
+      "km": 624.09,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152210040",
+      "name": "Warszawa - Nadwilanówka",
+      "river": "Wisła",
+      "lat": 52.1864,
+      "lon": 21.1081,
+      "km": 431.57,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152200110",
+      "name": "Modlin",
+      "river": "Wisła",
+      "lat": 52.4306,
+      "lon": 20.6597,
+      "km": 385.27,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152200030",
+      "name": "Wyszogród",
+      "river": "Wisła",
+      "lat": 52.3847,
+      "lon": 20.1931,
+      "km": 351.19,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "152190120",
+      "name": "Kępa Polska",
+      "river": "Wisła",
+      "lat": 52.4314,
+      "lon": 19.9633,
+      "km": 332.21,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "153180090",
+      "name": "Toruń",
+      "river": "Wisła",
+      "lat": 53.0078,
+      "lon": 18.6075,
+      "km": 207.23,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "153180020",
+      "name": "Fordon",
+      "river": "Wisła",
+      "lat": 53.1467,
+      "lon": 18.17,
+      "km": 166.99,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "153180100",
+      "name": "Grudziądz",
+      "river": "Wisła",
+      "lat": 53.485,
+      "lon": 18.7453,
+      "km": 107.34,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "154180150",
+      "name": "Tczew",
+      "river": "Wisła",
+      "lat": 54.0872,
+      "lon": 18.8056,
+      "km": 33.78,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "149210110",
+      "name": "Krosno",
+      "river": "Wisłok",
+      "lat": 49.6939,
+      "lon": 21.7747,
+      "km": 152.99,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "149210130",
+      "name": "Żarnowa",
+      "river": "Wisłok",
+      "lat": 49.8778,
+      "lon": 21.8175,
+      "km": 102.96,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "149210040",
+      "name": "Łabuzie",
+      "river": "Wisłoka",
+      "lat": 49.9878,
+      "lon": 21.3097,
+      "km": 71.64,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "150210120",
+      "name": "Mielec 2",
+      "river": "Wisłoka",
+      "lat": 50.2789,
+      "lon": 21.4303,
+      "km": 21.97,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "154210070",
+      "name": "Węgorzewo",
+      "river": "Węgorapa",
+      "lat": 54.2267,
+      "lon": 21.7308,
+      "km": 41.78,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "154210080",
+      "name": "Prynowo",
+      "river": "Węgorapa",
+      "lat": 54.2442,
+      "lon": 21.72,
+      "km": 37.28,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    },
+    {
+      "id": "154210100",
+      "name": "Mieduniszki",
+      "river": "Węgorapa",
+      "lat": 54.3264,
+      "lon": 21.98,
+      "km": 2.0,
+      "source": "IMGW-PIB danepubliczne API, field kilometr_biegu_rzeki",
+      "coordAccuracy": "station"
+    }
+  ],
+  "pairs": [
+    {
+      "id": "gwda:Ptusza->Ujście Gwdy do Noteci",
+      "river": "Gwda",
+      "from": "153160210",
+      "to": "MOUTH:Gwda",
+      "expectedKm": 57.55,
+      "straightLineKm": 34.96,
+      "sinuosity": 1.646,
+      "relTolerance": 0.06,
+      "tags": [
+        "lake_river",
+        "reservoirs",
+        "gwda",
+        "derived_endpoint"
+      ]
+    },
+    {
+      "id": "noteć:Nakło-Zachód->Białośliwie",
+      "river": "Noteć",
+      "from": "153170100",
+      "to": "153170010",
+      "expectedKm": 33.18,
+      "straightLineKm": 29.73,
+      "sinuosity": 1.116,
+      "relTolerance": 0.03,
+      "tags": [
+        "lowland",
+        "navigable"
+      ]
+    },
+    {
+      "id": "noteć:Białośliwie->Ujście",
+      "river": "Noteć",
+      "from": "153170010",
+      "to": "153160170",
+      "expectedKm": 29.74,
+      "straightLineKm": 26.44,
+      "sinuosity": 1.125,
+      "relTolerance": 0.03,
+      "tags": [
+        "lowland",
+        "navigable"
+      ]
+    },
+    {
+      "id": "noteć:Ujście->Czarnków",
+      "river": "Noteć",
+      "from": "153160170",
+      "to": "152160070",
+      "expectedKm": 26.2,
+      "straightLineKm": 20.1,
+      "sinuosity": 1.304,
+      "relTolerance": 0.03,
+      "tags": [
+        "lowland",
+        "navigable"
+      ]
+    },
+    {
+      "id": "noteć:Pakość->Nakło-Zachód",
+      "river": "Noteć",
+      "from": "152180030",
+      "to": "153170100",
+      "expectedKm": 83.19,
+      "straightLineKm": 50.59,
+      "sinuosity": 1.644,
+      "relTolerance": 0.06,
+      "tags": [
+        "navigable",
+        "canal_ambiguity"
+      ]
+    },
+    {
+      "id": "rega:Resko->Trzebiatów",
+      "river": "Rega",
+      "from": "153150050",
+      "to": "154150010",
+      "expectedKm": 66.18,
+      "straightLineKm": 33.51,
+      "sinuosity": 1.975,
+      "relTolerance": 0.03,
+      "tags": [
+        "lowland",
+        "kayak_trail"
+      ]
+    },
+    {
+      "id": "pasłęka:Tomaryny->Łozy",
+      "river": "Pasłęka",
+      "from": "153200040",
+      "to": "154190170",
+      "expectedKm": 115.4,
+      "straightLineKm": 53.67,
+      "sinuosity": 2.15,
+      "relTolerance": 0.06,
+      "tags": [
+        "lake_river",
+        "kayak_trail"
+      ]
+    },
+    {
+      "id": "węgorapa:Węgorzewo->Mieduniszki",
+      "river": "Węgorapa",
+      "from": "154210070",
+      "to": "154210100",
+      "expectedKm": 39.78,
+      "straightLineKm": 19.61,
+      "sinuosity": 2.028,
+      "relTolerance": 0.03,
+      "tags": [
+        "lake_outflow",
+        "kayak_trail"
+      ]
+    },
+    {
+      "id": "węgorapa:Prynowo->Mieduniszki",
+      "river": "Węgorapa",
+      "from": "154210080",
+      "to": "154210100",
+      "expectedKm": 35.28,
+      "straightLineKm": 19.19,
+      "sinuosity": 1.838,
+      "relTolerance": 0.03,
+      "tags": [
+        "kayak_trail"
+      ]
+    },
+    {
+      "id": "biebrza:Dębowo->Osowiec",
+      "river": "Biebrza",
+      "from": "153220260",
+      "to": "153220170",
+      "expectedKm": 32.87,
+      "straightLineKm": 23.87,
+      "sinuosity": 1.377,
+      "relTolerance": 0.03,
+      "tags": [
+        "meandering",
+        "wetland",
+        "kayak_trail"
+      ]
+    },
+    {
+      "id": "narew:Ploski->Babino",
+      "river": "Narew",
+      "from": "152230040",
+      "to": "153220270",
+      "expectedKm": 84.61,
+      "straightLineKm": 34.07,
+      "sinuosity": 2.484,
+      "relTolerance": 0.03,
+      "tags": [
+        "meandering"
+      ]
+    },
+    {
+      "id": "narew:Babino->Wizna",
+      "river": "Narew",
+      "from": "153220270",
+      "to": "153220070",
+      "expectedKm": 49.88,
+      "straightLineKm": 35.99,
+      "sinuosity": 1.386,
+      "relTolerance": 0.06,
+      "tags": [
+        "anastomosing",
+        "multi_channel"
+      ]
+    },
+    {
+      "id": "bug:Zabuże->Wyszków",
+      "river": "Bug",
+      "from": "152230200",
+      "to": "152210090",
+      "expectedKm": 167.83,
+      "straightLineKm": 112.27,
+      "sinuosity": 1.495,
+      "relTolerance": 0.03,
+      "tags": [
+        "meandering",
+        "long"
+      ]
+    },
+    {
+      "id": "bug:Strzyżów->Zabuże",
+      "river": "Bug",
+      "from": "150240010",
+      "to": "152230200",
+      "expectedKm": 360.7,
+      "straightLineKm": 177.94,
+      "sinuosity": 2.027,
+      "relTolerance": 0.03,
+      "tags": [
+        "border_river",
+        "long"
+      ]
+    },
+    {
+      "id": "wieprz:Krasnystaw->Trawniki",
+      "river": "Wieprz",
+      "from": "150230040",
+      "to": "151230010",
+      "expectedKm": 44.83,
+      "straightLineKm": 21.0,
+      "sinuosity": 2.134,
+      "relTolerance": 0.03,
+      "tags": [
+        "meandering",
+        "kayak_trail"
+      ]
+    },
+    {
+      "id": "wieprz:Trawniki->Lubartów",
+      "river": "Wieprz",
+      "from": "151230010",
+      "to": "151220090",
+      "expectedKm": 88.99,
+      "straightLineKm": 47.07,
+      "sinuosity": 1.891,
+      "relTolerance": 0.03,
+      "tags": [
+        "meandering",
+        "kayak_trail"
+      ]
+    },
+    {
+      "id": "wieprz:Lubartów->Kośmin",
+      "river": "Wieprz",
+      "from": "151220090",
+      "to": "151220010",
+      "expectedKm": 92.38,
+      "straightLineKm": 45.19,
+      "sinuosity": 2.044,
+      "relTolerance": 0.03,
+      "tags": [
+        "meandering",
+        "kayak_trail"
+      ]
+    },
+    {
+      "id": "dunajec:Sromowce Wyżne->Krościenko",
+      "river": "Dunajec",
+      "from": "149200140",
+      "to": "149200160",
+      "expectedKm": 20.33,
+      "straightLineKm": 7.12,
+      "sinuosity": 2.855,
+      "relTolerance": 0.06,
+      "tags": [
+        "mountain",
+        "gorge"
+      ]
+    },
+    {
+      "id": "raba:Dobczyce->Proszówki",
+      "river": "Raba",
+      "from": "149200090",
+      "to": "149200170",
+      "expectedKm": 37.9,
+      "straightLineKm": 28.15,
+      "sinuosity": 1.346,
+      "relTolerance": 0.03,
+      "tags": [
+        "mountain_foreland",
+        "below_dam"
+      ]
+    },
+    {
+      "id": "biała:Grybów->Ciężkowice",
+      "river": "Biała",
+      "from": "149200310",
+      "to": "149200330",
+      "expectedKm": 27.1,
+      "straightLineKm": 18.82,
+      "sinuosity": 1.44,
+      "relTolerance": 0.06,
+      "tags": [
+        "mountain"
+      ]
+    },
+    {
+      "id": "san:Lesko->Rzuchów",
+      "river": "San",
+      "from": "149220060",
+      "to": "150220070",
+      "expectedKm": 231.47,
+      "straightLineKm": 87.43,
+      "sinuosity": 2.647,
+      "relTolerance": 0.03,
+      "tags": [
+        "long",
+        "meandering"
+      ]
+    },
+    {
+      "id": "san:Rzuchów->Radomysl",
+      "river": "San",
+      "from": "150220070",
+      "to": "150210210",
+      "expectedKm": 75.69,
+      "straightLineKm": 62.33,
+      "sinuosity": 1.214,
+      "relTolerance": 0.03,
+      "tags": [
+        "lowland"
+      ]
+    },
+    {
+      "id": "wisłok:Krosno->Żarnowa",
+      "river": "Wisłok",
+      "from": "149210110",
+      "to": "149210130",
+      "expectedKm": 50.03,
+      "straightLineKm": 20.68,
+      "sinuosity": 2.419,
+      "relTolerance": 0.03,
+      "tags": [
+        "foothills"
+      ]
+    },
+    {
+      "id": "wisłoka:Łabuzie->Mielec 2",
+      "river": "Wisłoka",
+      "from": "149210040",
+      "to": "150210120",
+      "expectedKm": 49.67,
+      "straightLineKm": 33.49,
+      "sinuosity": 1.483,
+      "relTolerance": 0.03,
+      "tags": [
+        "lowland"
+      ]
+    },
+    {
+      "id": "soła:Rajcza->Żywiec",
+      "river": "Soła",
+      "from": "149190050",
+      "to": "149190100",
+      "expectedKm": 25.75,
+      "straightLineKm": 19.96,
+      "sinuosity": 1.29,
+      "relTolerance": 0.06,
+      "tags": [
+        "mountain"
+      ]
+    },
+    {
+      "id": "bóbr:Żagań->Stary Raduszec",
+      "river": "Bóbr",
+      "from": "151150080",
+      "to": "152150020",
+      "expectedKm": 74.54,
+      "straightLineKm": 49.29,
+      "sinuosity": 1.512,
+      "relTolerance": 0.03,
+      "tags": [
+        "lowland"
+      ]
+    },
+    {
+      "id": "warta:Sieradz->Koło",
+      "river": "Warta",
+      "from": "151180080",
+      "to": "152180120",
+      "expectedKm": 83.89,
+      "straightLineKm": 66.6,
+      "sinuosity": 1.26,
+      "relTolerance": 0.03,
+      "tags": [
+        "lowland"
+      ]
+    },
+    {
+      "id": "warta:Śrem->Oborniki",
+      "river": "Warta",
+      "from": "152170010",
+      "to": "152160100",
+      "expectedKm": 85.56,
+      "straightLineKm": 62.74,
+      "sinuosity": 1.364,
+      "relTolerance": 0.03,
+      "tags": [
+        "lowland",
+        "through_city"
+      ]
+    },
+    {
+      "id": "warta:Skwierzyna->Gorzów Wielkopolski",
+      "river": "Warta",
+      "from": "152150110",
+      "to": "152150040",
+      "expectedKm": 33.68,
+      "straightLineKm": 21.93,
+      "sinuosity": 1.536,
+      "relTolerance": 0.03,
+      "tags": [
+        "lowland",
+        "navigable"
+      ]
+    },
+    {
+      "id": "warta:Gorzów Wielkopolski->Kostrzyn n. Odrą",
+      "river": "Warta",
+      "from": "152150040",
+      "to": "152140070",
+      "expectedKm": 53.16,
+      "straightLineKm": 43.12,
+      "sinuosity": 1.233,
+      "relTolerance": 0.03,
+      "tags": [
+        "lowland",
+        "navigable"
+      ]
+    },
+    {
+      "id": "odra:Koźle->Opole - Groszowice",
+      "river": "Odra",
+      "from": "150180030",
+      "to": "150170290",
+      "expectedKm": 44.11,
+      "straightLineKm": 34.68,
+      "sinuosity": 1.272,
+      "relTolerance": 0.03,
+      "tags": [
+        "canalised",
+        "weirs"
+      ]
+    },
+    {
+      "id": "odra:Oława->Trestno",
+      "river": "Odra",
+      "from": "150170040",
+      "to": "151170030",
+      "expectedKm": 25.59,
+      "straightLineKm": 18.78,
+      "sinuosity": 1.363,
+      "relTolerance": 0.03,
+      "tags": [
+        "canalised",
+        "weirs"
+      ]
+    },
+    {
+      "id": "odra:Malczyce->Głogów",
+      "river": "Odra",
+      "from": "151160150",
+      "to": "151160060",
+      "expectedKm": 88.5,
+      "straightLineKm": 57.99,
+      "sinuosity": 1.526,
+      "relTolerance": 0.03,
+      "tags": [
+        "large_river"
+      ]
+    },
+    {
+      "id": "odra:Kostrzyn n. Odrą->Gozdowice",
+      "river": "Odra",
+      "from": "152140060",
+      "to": "152140020",
+      "expectedKm": 27.88,
+      "straightLineKm": 26.95,
+      "sinuosity": 1.035,
+      "relTolerance": 0.03,
+      "tags": [
+        "large_river",
+        "border_river"
+      ]
+    },
+    {
+      "id": "odra:Gozdowice->Bielinek",
+      "river": "Odra",
+      "from": "152140020",
+      "to": "152140010",
+      "expectedKm": 28.42,
+      "straightLineKm": 21.39,
+      "sinuosity": 1.329,
+      "relTolerance": 0.03,
+      "tags": [
+        "large_river",
+        "border_river"
+      ]
+    },
+    {
+      "id": "odra:Bielinek->Widuchowa",
+      "river": "Odra",
+      "from": "152140010",
+      "to": "153140020",
+      "expectedKm": 28.34,
+      "straightLineKm": 26.34,
+      "sinuosity": 1.076,
+      "relTolerance": 0.03,
+      "tags": [
+        "large_river",
+        "border_river"
+      ]
+    },
+    {
+      "id": "wisła:Zawichost->Annopol",
+      "river": "Wisła",
+      "from": "150210190",
+      "to": "150210180",
+      "expectedKm": 11.73,
+      "straightLineKm": 10.61,
+      "sinuosity": 1.106,
+      "relTolerance": 0.03,
+      "tags": [
+        "large_river",
+        "short"
+      ]
+    },
+    {
+      "id": "wisła:Warszawa - Nadwilanówka->Modlin",
+      "river": "Wisła",
+      "from": "152210040",
+      "to": "152200110",
+      "expectedKm": 46.3,
+      "straightLineKm": 40.82,
+      "sinuosity": 1.134,
+      "relTolerance": 0.06,
+      "tags": [
+        "large_river",
+        "braided",
+        "through_city"
+      ]
+    },
+    {
+      "id": "wisła:Wyszogród->Kępa Polska",
+      "river": "Wisła",
+      "from": "152200030",
+      "to": "152190120",
+      "expectedKm": 18.98,
+      "straightLineKm": 16.43,
+      "sinuosity": 1.155,
+      "relTolerance": 0.06,
+      "tags": [
+        "large_river",
+        "braided"
+      ]
+    },
+    {
+      "id": "wisła:Toruń->Fordon",
+      "river": "Wisła",
+      "from": "153180090",
+      "to": "153180020",
+      "expectedKm": 40.24,
+      "straightLineKm": 33.05,
+      "sinuosity": 1.217,
+      "relTolerance": 0.03,
+      "tags": [
+        "large_river"
+      ]
+    },
+    {
+      "id": "wisła:Grudziądz->Tczew",
+      "river": "Wisła",
+      "from": "153180100",
+      "to": "154180150",
+      "expectedKm": 73.56,
+      "straightLineKm": 67.08,
+      "sinuosity": 1.097,
+      "relTolerance": 0.03,
+      "tags": [
+        "large_river"
+      ]
+    }
+  ],
+  "odraNavigationKmAnchors": {
+    "note": "Official navigational kilometrage of the Odra (Wody Polskie RZGW Szczecin notices). Different zero than IMGW. Coordinates intentionally null: take them from OSM bridge ways, do not guess.",
+    "source": "https://www.gov.pl/attachment/950d9a29-1e96-4744-88e6-ab3d6cb02d03",
+    "anchors": [
+      {
+        "km": 542.4,
+        "name": "ujście Nysy Łużyckiej",
+        "lat": null,
+        "lon": null
+      },
+      {
+        "km": 580.0,
+        "name": "most autostrady A2 (Świecko)",
+        "lat": null,
+        "lon": null
+      },
+      {
+        "km": 584.2,
+        "name": "most drogowy Słubice – Frankfurt nad Odrą",
+        "lat": null,
+        "lon": null
+      },
+      {
+        "km": 615.1,
+        "name": "most kolejowy Kostrzyn nad Odrą",
+        "lat": null,
+        "lon": null
+      },
+      {
+        "km": 704.1,
+        "name": "jaz Widuchowa",
+        "lat": null,
+        "lon": null
+      }
+    ]
+  }
+}
