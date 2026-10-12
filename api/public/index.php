@@ -1,11 +1,13 @@
 <?php
+
 declare(strict_types=1);
 
-use Slim\Exception\HttpException;
-use Slim\Factory\AppFactory;
 use DI\ContainerBuilder;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Slim\Exception\HttpException;
+use Slim\Factory\AppFactory;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -14,8 +16,11 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->safeLoad();
 
 // Reads from the .env file or from real environment variables (e.g. in a container)
-$env = fn (string $key, string $default): string =>
-    $_ENV[$key] ?? $_SERVER[$key] ?? (getenv($key) ?: $default);
+$env = static function (string $key, string $default): string {
+    $value = $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
+
+    return is_string($value) && $value !== '' ? $value : $default;
+};
 
 $debug = filter_var($env('APP_DEBUG', 'false'), FILTER_VALIDATE_BOOLEAN);
 $corsOrigin = $env('CORS_ORIGIN', 'http://localhost:5173');
@@ -40,7 +45,7 @@ $errorMiddleware = $app->addErrorMiddleware($debug, true, true);
 $errorMiddleware->setDefaultErrorHandler(function (
     Request $request,
     Throwable $exception,
-    bool $displayErrorDetails
+    bool $displayErrorDetails,
 ) use ($app) {
     $isHttpException = $exception instanceof HttpException;
     $status = $isHttpException ? $exception->getCode() : 500;
@@ -51,8 +56,8 @@ $errorMiddleware->setDefaultErrorHandler(function (
     $response = $app->getResponseFactory()->createResponse();
     $response->getBody()->write(json_encode([
         'status' => 'error',
-        'message' => $message
-    ]));
+        'message' => $message,
+    ], JSON_THROW_ON_ERROR));
 
     return $response
         ->withHeader('Content-Type', 'application/json')
@@ -60,7 +65,7 @@ $errorMiddleware->setDefaultErrorHandler(function (
 });
 
 // CORS handling (added last so it also wraps error responses)
-$app->add(function (Request $request, $handler) use ($corsOrigin) {
+$app->add(function (Request $request, RequestHandler $handler) use ($corsOrigin) {
     $response = $handler->handle($request);
     return $response
         ->withHeader('Access-Control-Allow-Origin', $corsOrigin)
@@ -69,14 +74,14 @@ $app->add(function (Request $request, $handler) use ($corsOrigin) {
 });
 
 
-$app->post('/api/calculate-distance', [
-    \Jbryn\DistanceCalculator\Controller\DistanceController::class,
-    'calculate'
-]);
+$app->post(
+    '/api/calculate-distance',
+    \Jbryn\DistanceCalculator\Controller\DistanceController::class . ':calculate',
+);
 
 
 $app->get('/', function (Request $request, Response $response) {
-    $response->getBody()->write(json_encode(['status' => 'API is working!']));
+    $response->getBody()->write(json_encode(['status' => 'API is working!'], JSON_THROW_ON_ERROR));
     return $response->withHeader('Content-Type', 'application/json');
 });
 

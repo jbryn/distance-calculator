@@ -7,12 +7,15 @@ export function useDistance() {
   const isLoading = ref(false)
   const apiError = ref<string | null>(null)
 
-  const calculateDistance = async (point1: Coordinates, point2: Coordinates): Promise<DistanceResult> => {
+  const calculateDistance = async (
+    point1: Coordinates,
+    point2: Coordinates
+  ): Promise<DistanceResult> => {
     try {
       const response = await fetch(`${getApiUrl()}/api/calculate-distance`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           lat1: Number(point1.latitude),
@@ -21,26 +24,30 @@ export function useDistance() {
           lon2: Number(point2.longitude)
         })
       })
-  
+
       if (!response.ok) {
         throw new Error('Failed to calculate distance')
       }
-  
+
       const data = await response.json()
-      
+
       const { meters, kilometers } = data.data ?? {}
 
-      if (data.status !== 'success' || typeof meters !== 'number' || typeof kilometers !== 'number') {
+      if (
+        data.status !== 'success' ||
+        typeof meters !== 'number' ||
+        typeof kilometers !== 'number'
+      ) {
         throw new Error('Invalid response format')
       }
-  
+
       return { meters, kilometers }
     } catch (error) {
       console.error('API Error:', error)
       if (error instanceof Error) {
         throw error
       }
-      throw new Error('Failed to calculate distance')
+      throw new Error('Failed to calculate distance', { cause: error })
     }
   }
 

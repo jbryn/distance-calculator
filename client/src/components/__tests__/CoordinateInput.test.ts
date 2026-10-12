@@ -15,16 +15,17 @@ describe('CoordinateInput', () => {
   describe('rendering', () => {
     it('renders with default props', () => {
       const wrapper = mount(CoordinateInput, { props: defaultProps })
-      
+
       expect(wrapper.find('h3').text()).toBe('Point 1')
-      expect(wrapper.find('.marker').attributes('style'))
-        .toContain('background-color: rgb(75, 123, 245)')
+      expect(wrapper.find('.marker').attributes('style')).toContain(
+        'background-color: rgb(75, 123, 245)'
+      )
       expect(wrapper.findAll('input')).toHaveLength(2)
     })
 
     it('displays correct placeholders based on point number', async () => {
       const wrapper = mount(CoordinateInput, { props: defaultProps })
-      
+
       // Point 1 placeholders
       expect(wrapper.find('#lat1').attributes('placeholder')).toBe('e.g. 51.5074')
       expect(wrapper.find('#lng1').attributes('placeholder')).toBe('e.g. -0.1278')
@@ -85,7 +86,7 @@ describe('CoordinateInput', () => {
       })
 
       const inputs = wrapper.findAll('input')
-      
+
       await inputs[0].trigger('blur')
       expect(onBlur).toHaveBeenCalledTimes(1)
 
@@ -115,7 +116,7 @@ describe('CoordinateInput', () => {
       const wrapper = mount(CoordinateInput, { props: defaultProps })
       const inputs = wrapper.findAll('input')
 
-      inputs.forEach(input => {
+      inputs.forEach((input) => {
         expect(input.attributes('required')).toBeDefined()
       })
     })
@@ -127,8 +128,9 @@ describe('CoordinateInput', () => {
         props: { ...defaultProps, markerColor: '#22C55E' }
       })
 
-      expect(wrapper.find('.marker').attributes('style'))
-        .toContain('background-color: rgb(34, 197, 94)')
+      expect(wrapper.find('.marker').attributes('style')).toContain(
+        'background-color: rgb(34, 197, 94)'
+      )
     })
 
     it('maintains consistent layout with and without errors', async () => {
@@ -142,8 +144,9 @@ describe('CoordinateInput', () => {
         }
       })
 
-      expect((wrapper.find('.point-container').element as HTMLElement).style.height)
-        .toBe(initialHeight)
+      expect((wrapper.find('.point-container').element as HTMLElement).style.height).toBe(
+        initialHeight
+      )
     })
   })
 })

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jbryn\DistanceCalculator\Tests\Controller;
@@ -28,7 +29,7 @@ class DistanceControllerTest extends TestCase
         $this->assertSame('application/json', $response->getHeaderLine('Content-Type'));
         $this->assertSame(
             ['status' => 'success', 'data' => ['meters' => 20015086.8, 'kilometers' => 20015.09]],
-            $this->json($response)
+            $this->json($response),
         );
     }
 
@@ -39,7 +40,7 @@ class DistanceControllerTest extends TestCase
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame(
             ['status' => 'success', 'data' => ['meters' => 0, 'kilometers' => 0]],
-            $this->json($response)
+            $this->json($response),
         );
     }
 
@@ -54,7 +55,7 @@ class DistanceControllerTest extends TestCase
                 'status' => 'error',
                 'message' => 'Invalid latitude for lat1. Value must be between -90 and 90 degrees',
             ],
-            $this->json($response)
+            $this->json($response),
         );
     }
 
@@ -65,10 +66,13 @@ class DistanceControllerTest extends TestCase
         $this->assertSame(400, $response->getStatusCode());
         $this->assertSame(
             ['status' => 'error', 'message' => 'Request body must be a JSON object'],
-            $this->json($response)
+            $this->json($response),
         );
     }
 
+    /**
+     * @param array<string, mixed>|null $body
+     */
     private function post(?array $body): ResponseInterface
     {
         $request = (new ServerRequestFactory())
@@ -78,8 +82,14 @@ class DistanceControllerTest extends TestCase
         return $this->controller->calculate($request, new Response());
     }
 
+    /**
+     * @return array<mixed>
+     */
     private function json(ResponseInterface $response): array
     {
-        return json_decode((string)$response->getBody(), true);
+        $data = json_decode((string) $response->getBody(), true);
+        self::assertIsArray($data);
+
+        return $data;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jbryn\DistanceCalculator\Tests\Service;
@@ -45,13 +46,16 @@ class DistanceCalculatorTest extends TestCase
         float $lon1,
         float $lat2,
         float $lon2,
-        float $expectedKilometers
+        float $expectedKilometers,
     ): void {
         $result = $this->calculator->calculate($lat1, $lon1, $lat2, $lon2);
 
         $this->assertEqualsWithDelta($expectedKilometers, $result['kilometers'], 1.0);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public static function cityPairs(): array
     {
         return [

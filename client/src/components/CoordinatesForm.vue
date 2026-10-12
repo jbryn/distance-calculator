@@ -24,20 +24,22 @@ const point2Errors = ref<ValidationErrors>({})
 const isFormValid = computed(() => {
   const p1Errors = validatePoint(point1.value)
   const p2Errors = validatePoint(point2.value)
-  
-  return !Object.values(p1Errors).some(error => error !== undefined) &&
-         !Object.values(p2Errors).some(error => error !== undefined)
+
+  return (
+    !Object.values(p1Errors).some((error) => error !== undefined) &&
+    !Object.values(p2Errors).some((error) => error !== undefined)
+  )
 })
 
 const handleSubmit = async () => {
   point1Errors.value = validatePoint(point1.value)
   point2Errors.value = validatePoint(point2.value)
-  
+
   if (isFormValid.value) {
     isLoading.value = true
     apiError.value = null
     distance.value = null
-    
+
     try {
       distance.value = await calculateDistance(point1.value, point2.value)
     } catch (error) {
@@ -65,34 +67,33 @@ const formattedDistance = computed(() => {
 
 <template>
   <div class="coordinate-form">
-    <form @submit.prevent="handleSubmit" class="form-container">
+    <form class="form-container" @submit.prevent="handleSubmit">
       <CoordinateInput
-        :pointNumber="1"
+        :point-number="1"
         :coordinates="point1"
         :errors="point1Errors"
-        :onBlur="() => handleBlur(1)"
+        :on-blur="() => handleBlur(1)"
         marker-color="#4B7BF5"
       />
-      
+
       <CoordinateInput
-        :pointNumber="2"
+        :point-number="2"
         :coordinates="point2"
         :errors="point2Errors"
-        :onBlur="() => handleBlur(2)"
+        :on-blur="() => handleBlur(2)"
         marker-color="#22C55E"
       />
 
-      <button 
-        type="submit" 
-        :disabled="!isFormValid || isLoading"
-        class="calculate-button"
-      >
+      <button type="submit" :disabled="!isFormValid || isLoading" class="calculate-button">
         {{ isLoading ? 'Calculating...' : 'Calculate Distance' }}
         <span class="arrow">→</span>
       </button>
 
       <div v-if="formattedDistance" class="result">
-        <p>Distance: {{ formattedDistance.kilometers }} kilometers ({{ formattedDistance.meters }} meters)</p>
+        <p>
+          Distance: {{ formattedDistance.kilometers }} kilometers ({{ formattedDistance.meters }}
+          meters)
+        </p>
       </div>
 
       <div v-if="apiError" class="error">
@@ -113,7 +114,9 @@ const formattedDistance = computed(() => {
   width: 100%;
   background: white;
   border-radius: 16px;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
   padding: 24px;
   box-sizing: border-box;
 }
@@ -121,7 +124,7 @@ const formattedDistance = computed(() => {
 .calculate-button {
   width: 100%;
   padding: 16px;
-  background-color: #4B7BF5;
+  background-color: #4b7bf5;
   color: white;
   border: none;
   border-radius: 8px;
@@ -135,12 +138,12 @@ const formattedDistance = computed(() => {
 }
 
 .calculate-button:disabled {
-  background-color: #E5E7EB;
+  background-color: #e5e7eb;
   cursor: not-allowed;
 }
 
 .calculate-button:hover:not(:disabled) {
-  background-color: #3B69E3;
+  background-color: #3b69e3;
 }
 
 .arrow {
@@ -148,7 +151,7 @@ const formattedDistance = computed(() => {
 }
 
 .error {
-  color: #EF4444;
+  color: #ef4444;
   font-size: 0.9em;
   margin-top: 12px;
   text-align: center;

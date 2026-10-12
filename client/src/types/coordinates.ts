@@ -1,14 +1,14 @@
 export interface Coordinates {
-    latitude: string
-    longitude: string
-  }
-  
-  export interface ValidationErrors {
-    latitude?: string
-    longitude?: string
-  }
+  latitude: string
+  longitude: string
+}
 
-  export interface DistanceResult {
-    meters: number
-    kilometers: number
-  }
+export interface ValidationErrors {
+  latitude?: string
+  longitude?: string
+}
+
+export interface DistanceResult {
+  meters: number
+  kilometers: number
+}

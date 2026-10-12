@@ -1,50 +1,49 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jbryn\DistanceCalculator\Controller;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Jbryn\DistanceCalculator\Exception\ValidationException;
 use Jbryn\DistanceCalculator\Service\DistanceCalculator;
 use Jbryn\DistanceCalculator\Service\Validator;
-use Jbryn\DistanceCalculator\Exception\ValidationException;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 class DistanceController
 {
     public function __construct(
         private DistanceCalculator $calculator,
-        private Validator $validator
+        private Validator $validator,
     ) {}
 
     public function calculate(Request $request, Response $response): Response
     {
         try {
-            $data = $request->getParsedBody();
-            
-            $this->validator->validate($data);
-            
+            $coordinates = $this->validator->validate($request->getParsedBody());
+
             $result = $this->calculator->calculate(
-                (float)$data['lat1'],
-                (float)$data['lon1'],
-                (float)$data['lat2'],
-                (float)$data['lon2']
+                $coordinates['lat1'],
+                $coordinates['lon1'],
+                $coordinates['lat2'],
+                $coordinates['lon2'],
             );
-            
+
             $response->getBody()->write(json_encode([
                 'status' => 'success',
-                'data' => $result
-            ]));
-            
+                'data' => $result,
+            ], JSON_THROW_ON_ERROR));
+
             return $response
                 ->withHeader('Content-Type', 'application/json')
                 ->withStatus(200);
-                
+
         } catch (ValidationException $e) {
             $response->getBody()->write(json_encode([
                 'status' => 'error',
-                'message' => $e->getMessage()
-            ]));
-            
+                'message' => $e->getMessage(),
+            ], JSON_THROW_ON_ERROR));
+
             return $response
                 ->withHeader('Content-Type', 'application/json')
                 ->withStatus(400);

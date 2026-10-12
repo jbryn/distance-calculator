@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jbryn\DistanceCalculator\Tests\Service;
@@ -6,7 +7,6 @@ namespace Jbryn\DistanceCalculator\Tests\Service;
 use Jbryn\DistanceCalculator\Exception\ValidationException;
 use Jbryn\DistanceCalculator\Service\Validator;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 
 class ValidatorTest extends TestCase
@@ -20,13 +20,21 @@ class ValidatorTest extends TestCase
         $this->validator = new Validator();
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     #[DataProvider('validPayloads')]
-    #[DoesNotPerformAssertions]
     public function testAcceptsValidPayload(array $data): void
     {
-        $this->validator->validate($data);
+        $coordinates = $this->validator->validate($data);
+
+        $this->assertSame(['lat1', 'lon1', 'lat2', 'lon2'], array_keys($coordinates));
+        $this->assertContainsOnly('float', $coordinates);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public static function validPayloads(): array
     {
         return [
@@ -47,6 +55,9 @@ class ValidatorTest extends TestCase
         $this->validator->validate($body);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public static function nonArrayBodies(): array
     {
         return [
@@ -77,6 +88,9 @@ class ValidatorTest extends TestCase
         $this->validator->validate([...self::VALID, $field => null]);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public static function requiredFields(): array
     {
         return [['lat1'], ['lon1'], ['lat2'], ['lon2']];
@@ -91,6 +105,9 @@ class ValidatorTest extends TestCase
         $this->validator->validate([...self::VALID, 'lat1' => $value]);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public static function nonNumericValues(): array
     {
         return [
@@ -110,6 +127,9 @@ class ValidatorTest extends TestCase
         $this->validator->validate([...self::VALID, $field => $value]);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public static function outOfRangeLatitudes(): array
     {
         return [
@@ -129,6 +149,9 @@ class ValidatorTest extends TestCase
         $this->validator->validate([...self::VALID, $field => $value]);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public static function outOfRangeLongitudes(): array
     {
         return [

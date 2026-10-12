@@ -34,6 +34,11 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --no-progress --prefer-dist
 
+      # Static analysis and code style only need to run once, on the newest PHP
+      - name: Lint
+        if: matrix.php == '8.4'
+        run: composer lint
+
       - name: Run tests
         run: composer test
 
@@ -57,6 +62,12 @@ jobs:
         env:
           # The Cypress binary is only needed by the E2E job
           CYPRESS_INSTALL_BINARY: 0
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Check formatting
+        run: npm run format:check
 
       - name: Run tests
         run: npx vitest run
