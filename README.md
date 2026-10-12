@@ -58,6 +58,10 @@ cp client/.env.example client/.env
 |---|---|---|---|
 | `api/.env` | `APP_DEBUG` | `false` | Include error details in API error responses |
 | `api/.env` | `CORS_ORIGIN` | `http://localhost:5173` | Frontend origin allowed to call the API |
+| `api/.env` | `OVERPASS_ENDPOINTS` | two public servers | OpenStreetMap (Overpass) servers to query, comma-separated, tried in order |
+| `api/.env` | `OVERPASS_CACHE_DIR` | `api/var/cache/overpass` | Where map data responses are saved |
+| `api/.env` | `OVERPASS_CACHE_TTL` | `2592000` (30 days) | Seconds a saved response counts as fresh |
+| `api/.env` | `OVERPASS_OFFLINE` | `false` | Answer only from saved responses, never from the network |
 | `client/.env` | `VITE_API_URL` | `http://localhost:8080` | Base URL of the API |
 
 If you run the API or the frontend on a different port, update the matching variable on the other side.

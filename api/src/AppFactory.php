@@ -29,6 +29,7 @@ final class AppFactory
     {
         $containerBuilder = new ContainerBuilder();
         $containerBuilder->addDefinitions(__DIR__ . '/Config/dependencies.php');
+        $containerBuilder->addDefinitions([Settings::class => $settings]);
         $containerBuilder->addDefinitions($definitions);
 
         $app = SlimAppFactory::createFromContainer($containerBuilder->build());
