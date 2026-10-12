@@ -4,6 +4,7 @@
 /api/logs/*
 /api/.phpunit.cache
 /api/.php-cs-fixer.cache
+/api/var
 
 # Frontend
 /client/node_modules
