@@ -13,14 +13,17 @@ use Jbryn\DistanceCalculator\Geo\Polyline;
 final class RiverSection
 {
     /**
-     * @param LinePosition $from where the stretch starts; its distance is measured from the river's source
-     * @param LinePosition $to   where the stretch ends
-     * @param Polyline     $line the course of the river from $from to $to
+     * @param LinePosition        $from     where the stretch starts; its distance is measured from the river's source
+     * @param LinePosition        $to       where the stretch ends
+     * @param Polyline            $line     the course of the river from $from to $to
+     * @param list<RiverFeature>  $features obstacles and access points on the stretch, in travel
+     *                                      order, each with its distance from $from
      */
     public function __construct(
         public readonly LinePosition $from,
         public readonly LinePosition $to,
         public readonly Polyline $line,
+        public readonly array $features = [],
     ) {}
 
     /**

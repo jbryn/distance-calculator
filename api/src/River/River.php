@@ -19,14 +19,19 @@ final class River
      */
     public const MAX_SNAP_DISTANCE = 2000.0;
 
+    /**
+     * @param list<RiverFeature> $features obstacles and access points, ordered from source to mouth
+     */
     public function __construct(
         public readonly int $id,
         public readonly string $name,
         public readonly Polyline $line,
+        public readonly array $features = [],
     ) {}
 
     /**
-     * The stretch of the river between two points, each snapped to the nearest place on the line.
+     * The stretch of the river between two points, each snapped to the nearest place on the line,
+     * with the features a paddler meets on the way, in the order they are met.
      *
      * @throws PointTooFarException
      */
@@ -41,6 +46,20 @@ final class River
             }
         }
 
-        return new RiverSection($start, $end, $this->line->section($start->distance, $end->distance));
+        $nearer = min($start->distance, $end->distance);
+        $farther = max($start->distance, $end->distance);
+
+        $features = [];
+        foreach ($this->features as $feature) {
+            if ($feature->distance >= $nearer && $feature->distance <= $farther) {
+                $features[] = $feature->at(abs($feature->distance - $start->distance));
+            }
+        }
+
+        if ($end->distance < $start->distance) {
+            $features = array_reverse($features);
+        }
+
+        return new RiverSection($start, $end, $this->line->section($start->distance, $end->distance), $features);
     }
 }

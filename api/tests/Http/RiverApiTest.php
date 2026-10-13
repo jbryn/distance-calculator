@@ -6,7 +6,9 @@ namespace Jbryn\DistanceCalculator\Tests\Http;
 
 use Jbryn\DistanceCalculator\Config\Settings;
 use Jbryn\DistanceCalculator\Overpass\OverpassClient;
+use Jbryn\DistanceCalculator\Overpass\QueryCache;
 use Jbryn\DistanceCalculator\River\RiverCatalogue;
+use Jbryn\DistanceCalculator\River\RiverRelation;
 use Jbryn\DistanceCalculator\River\RiverSummary;
 use Jbryn\DistanceCalculator\Tests\Overpass\TemporaryDirectory;
 use Jbryn\DistanceCalculator\Tests\River\RiverFixtures;
@@ -94,7 +96,7 @@ class RiverApiTest extends TestCase
 
         $river = $this->data($response);
 
-        $this->assertSame(['id', 'name', 'length', 'points'], array_keys($river));
+        $this->assertSame(['id', 'name', 'length', 'points', 'features'], array_keys($river));
         $this->assertSame(8974372, $river['id']);
         $this->assertSame('Gwda', $river['name']);
 
@@ -106,6 +108,113 @@ class RiverApiTest extends TestCase
         $this->assertCount(2749, $points);
         $this->assertSame([53.85058, 16.669742], $points[0]);
         $this->assertSame([53.0548523, 16.7259211], $points[2748]);
+    }
+
+    public function testRiverListsItsObstaclesAndAccessPointsFromSourceToMouth(): void
+    {
+        $features = $this->features($this->data($this->request('GET', self::GWDA)));
+
+        $this->assertCount(52, $features);
+        $kinds = [];
+        foreach ($features as $feature) {
+            self::assertIsString($feature['kind']);
+            $kinds[$feature['kind']] = ($kinds[$feature['kind']] ?? 0) + 1;
+        }
+        $this->assertSame(['bridge' => 33, 'weir' => 8, 'dam' => 8, 'put_in' => 3], $kinds);
+
+        // A footbridge 24 m below the source
+        $this->assertSame(
+            [
+                'kind' => 'bridge',
+                'category' => 'access',
+                'name' => null,
+                'point' => [53.8505192, 16.6694025],
+                'distanceFromSource' => 23.8,
+            ],
+            $features[0],
+        );
+
+        $this->assertSame('Most Bolesława Chrobrego', $features[42]['name']);
+        $this->assertSame('obstacle', $features[5]['category']);
+        $this->assertSame('weir', $features[5]['kind']);
+
+        $distances = array_column($features, 'distanceFromSource');
+        $sorted = $distances;
+        sort($sorted);
+        $this->assertSame($sorted, $distances);
+    }
+
+    public function testSectionListsWhatLiesOnItWithDistancesFromItsStart(): void
+    {
+        $section = $this->data($this->request('GET', self::GWDA . '/section?from=' . self::PTUSZA . '&to=' . self::MOUTH));
+        $features = $this->features($section);
+
+        $this->assertCount(27, $features);
+
+        // The first thing below Ptusza is a bridge after 278 m, then the dam and weir of a power station
+        $this->assertSame(
+            ['kind' => 'bridge', 'category' => 'access', 'name' => null, 'point' => [53.3646679, 16.7940129], 'distance' => 278.3],
+            $features[0],
+        );
+        $this->assertSame(['dam', 3548.2], [$features[1]['kind'], $features[1]['distance']]);
+        $this->assertSame(['weir', 3548.8], [$features[2]['kind'], $features[2]['distance']]);
+
+        $distances = array_column($features, 'distance');
+        $sorted = $distances;
+        sort($sorted);
+        $this->assertSame($sorted, $distances);
+        $this->assertLessThanOrEqual($section['length'], end($distances));
+    }
+
+    public function testSectionAgainstTheCurrentListsTheSameFeaturesInReverse(): void
+    {
+        $down = $this->data($this->request('GET', self::GWDA . '/section?from=' . self::PTUSZA . '&to=' . self::MOUTH));
+        $up = $this->data($this->request('GET', self::GWDA . '/section?from=' . self::MOUTH . '&to=' . self::PTUSZA));
+
+        $downFeatures = $this->features($down);
+        $upFeatures = $this->features($up);
+
+        $this->assertSame(
+            array_reverse(array_column($downFeatures, 'point')),
+            array_column($upFeatures, 'point'),
+        );
+
+        // The bridge 278 m below Ptusza is the last thing met when paddling up from the mouth
+        $last = $upFeatures[count($upFeatures) - 1];
+        self::assertIsFloat($down['length']);
+        self::assertIsFloat($last['distance']);
+        $this->assertEqualsWithDelta($down['length'] - 278.3, $last['distance'], 0.1);
+    }
+
+    public function testASectionWithNothingOnItHasAnEmptyFeatureList(): void
+    {
+        $section = $this->data($this->request('GET', self::GWDA . '/section?from=' . self::PTUSZA . '&to=' . self::PTUSZA));
+
+        $this->assertSame([], $section['features']);
+    }
+
+    public function testARiverWithoutSavedFeatureDataIsUnavailable(): void
+    {
+        // A data folder that holds the course of the Gwda but nothing about what lies along it
+        $this->createTemporaryDirectory();
+        mkdir($this->directory);
+        $course = (new QueryCache(RiverFixtures::SHIPPED))->path(RiverRelation::overpassQuery(8974372));
+        copy($course, $this->directory . '/' . basename($course));
+
+        try {
+            $response = $this->request('GET', self::GWDA, settings: new Settings(
+                logErrors: false,
+                overpassCacheDir: $this->directory,
+            ));
+
+            $this->assertSame(503, $response->getStatusCode());
+            $this->assertSame(
+                ['status' => 'error', 'message' => 'The data for this river is unavailable'],
+                $this->json($response),
+            );
+        } finally {
+            $this->removeTemporaryDirectory();
+        }
     }
 
     public function testUnknownRiverReturnsNotFound(): void
@@ -148,7 +257,7 @@ class RiverApiTest extends TestCase
 
         $section = $this->data($response);
 
-        $this->assertSame(['river', 'length', 'downstream', 'from', 'to', 'points'], array_keys($section));
+        $this->assertSame(['river', 'length', 'downstream', 'from', 'to', 'points', 'features'], array_keys($section));
         $this->assertSame(['id' => 8974372, 'name' => 'Gwda'], $section['river']);
 
         // 57.81 km along the bends; IMGW gives 57.55 km and the straight line is 34.97 km
@@ -349,6 +458,34 @@ class RiverApiTest extends TestCase
 
         $this->assertSame(405, $response->getStatusCode());
         $this->assertSame('GET', $response->getHeaderLine('Allow'));
+    }
+
+    /**
+     * @param array<mixed> $data
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function features(array $data): array
+    {
+        $features = $data['features'] ?? null;
+        self::assertIsArray($features);
+
+        $checked = [];
+        foreach ($features as $feature) {
+            self::assertIsArray($feature);
+
+            $fields = [];
+            foreach ($feature as $key => $value) {
+                self::assertIsString($key);
+                $fields[$key] = $value;
+            }
+
+            self::assertSame(['kind', 'category', 'name', 'point'], array_slice(array_keys($fields), 0, 4));
+            self::assertCount(5, $fields);
+            $checked[] = $fields;
+        }
+
+        return $checked;
     }
 
     /**
