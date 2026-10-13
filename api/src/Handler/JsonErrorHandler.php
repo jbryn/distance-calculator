@@ -27,12 +27,13 @@ final class JsonErrorHandler implements ErrorHandlerInterface
     ): ResponseInterface {
         $isHttpException = $exception instanceof HttpException;
 
-        // HTTP errors (404, 405, ...) are the client's doing; anything else is a bug worth logging
-        if (!$isHttpException && $logErrors) {
+        $status = $isHttpException ? $exception->getCode() : 500;
+
+        // Errors in the 400s are the client's doing; anything else is a fault of ours worth logging
+        if ($status >= 500 && $logErrors) {
             error_log((string) $exception);
         }
 
-        $status = $isHttpException ? $exception->getCode() : 500;
         $message = $isHttpException || $displayErrorDetails
             ? $exception->getMessage()
             : 'Internal server error';

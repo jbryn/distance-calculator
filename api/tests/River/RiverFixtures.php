@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Jbryn\DistanceCalculator\Tests\River;
 
-use Jbryn\DistanceCalculator\Overpass\CachedOverpassClient;
-use Jbryn\DistanceCalculator\Overpass\OfflineOverpassClient;
+use Jbryn\DistanceCalculator\Overpass\OverpassClient;
+use Jbryn\DistanceCalculator\Overpass\OverpassUnavailableException;
 use Jbryn\DistanceCalculator\Overpass\QueryCache;
 use Jbryn\DistanceCalculator\River\RiverRelation;
 use Jbryn\DistanceCalculator\River\RiverStitcher;
@@ -36,16 +36,60 @@ final class RiverFixtures
         'Wisłoka' => 7577712,
     ];
 
-    private const DIRECTORY = __DIR__ . '/../fixtures/overpass';
+    /** Rivers the application ships with */
+    public const SHIPPED = __DIR__ . '/../../data/overpass';
+
+    /** Rivers kept only as test cases, such as the Soła with its gaps */
+    public const TEST_ONLY = __DIR__ . '/../fixtures/overpass';
 
     /** @var array<int, StitchedRiver> */
     private static array $stitched = [];
 
     public static function relation(int $id): RiverRelation
     {
-        $client = new CachedOverpassClient(new OfflineOverpassClient(), new QueryCache(self::DIRECTORY), PHP_INT_MAX);
+        return RiverRelation::fromElement(self::client()->query(RiverRelation::overpassQuery($id))[0]);
+    }
 
-        return RiverRelation::fromElement($client->query(RiverRelation::overpassQuery($id))[0]);
+    /**
+     * Answers from the shipped rivers first, then from the test-only ones, and never from the network.
+     */
+    public static function client(): OverpassClient
+    {
+        return self::savedResponses([self::SHIPPED, self::TEST_ONLY]);
+    }
+
+    /**
+     * Answers only from the rivers the application ships with.
+     */
+    public static function shippedOnlyClient(): OverpassClient
+    {
+        return self::savedResponses([self::SHIPPED]);
+    }
+
+    /**
+     * @param list<string> $directories
+     */
+    private static function savedResponses(array $directories): OverpassClient
+    {
+        return new class ($directories) implements OverpassClient {
+            /**
+             * @param list<string> $directories
+             */
+            public function __construct(private readonly array $directories) {}
+
+            public function query(string $query): array
+            {
+                foreach ($this->directories as $directory) {
+                    $saved = (new QueryCache($directory))->get($query);
+
+                    if ($saved !== null) {
+                        return $saved->elements;
+                    }
+                }
+
+                throw new OverpassUnavailableException('no saved response for this query');
+            }
+        };
     }
 
     public static function stitched(int $id): StitchedRiver
