@@ -2,32 +2,50 @@
 
 [![CI](https://github.com/jbryn/distance-calculator/actions/workflows/ci.yml/badge.svg)](https://github.com/jbryn/distance-calculator/actions/workflows/ci.yml)
 
-A web application that calculates the distance between two geographic points using coordinates. Built with PHP backend (Slim Framework) and Vue.js frontend.
+A tool for planning kayaking trips: pick a section of a river and get the distance along its course, following every bend, rather than the straight line between two points. River geometry comes from OpenStreetMap. Built with a PHP backend (Slim Framework) and a Vue.js frontend.
 
-## Features
+The project started as a calculator for the straight-line distance between two coordinates and is being rebuilt around rivers. See [Status](#status) for what works today.
 
-- Calculate distance between two geographic points using latitude and longitude
-- Display results in both meters and kilometers
-- Input validation for coordinate values
-- CORS enabled for local development
-- Error handling
+## Status
+
+Work is tracked in the [Kayak river tool v1](https://github.com/jbryn/distance-calculator/milestone/1) milestone, one issue per pull request.
+
+**Working now**
+
+- River API: search rivers by name, fetch a river's course and length, and measure the section between two points snapped to the river (see [Rivers](#rivers))
+- 15 Polish rivers, served from map data saved in the repository (see [`api/data`](api/data/README.md)); no request depends on an external service
+- Distances checked against official river kilometrage from IMGW-PIB on 33 stretches between gauging stations: 30 within the reference tolerance (3%, or 6% on difficult reaches), 21 within 0.5%
+- Detection of rivers whose map data has gaps; these are reported and not offered
+- The original straight-line calculator, in the API and in the web client
+
+**Planned**
+
+- Obstacles and access points along a river: weirs, dams, locks, put-ins, bridges
+- Map interface: search for a river, click a start and a finish, see the section highlighted
+- Trip details: kilometers or miles, estimated paddling time, obstacles on the route
+- Shareable links and GPX export
+- Docker setup and a public deployment
 
 ## Technologies Used
 
 ### Backend
 
-- PHP 8.x
-- Slim Framework 4
-- dotenv for environment variables
-- Composer for dependency management
+- PHP 8.1+
+- Slim Framework 4 with PHP-DI
+- Guzzle for HTTP requests to the Overpass API (used only when refreshing river data)
+- PHPUnit, PHPStan (strictest level) and PHP-CS-Fixer
 
 ### Frontend
 
-- Vue.js 3
+- Vue.js 3 with TypeScript
 - Vite as build tool
-- Vitest for testing
-- Cypress for end-to-end testing
-- TypeScript
+- Vitest for unit tests
+- Cypress for end-to-end tests
+- ESLint and Prettier
+
+### Tooling
+
+- GitHub Actions: tests on PHP 8.1 and 8.4, linting, static analysis and end-to-end tests on every pull request
 
 ## Setup and Installation
 
