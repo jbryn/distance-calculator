@@ -58,10 +58,10 @@ cp client/.env.example client/.env
 |---|---|---|---|
 | `api/.env` | `APP_DEBUG` | `false` | Include error details in API error responses |
 | `api/.env` | `CORS_ORIGIN` | `http://localhost:5173` | Frontend origin allowed to call the API |
-| `api/.env` | `OVERPASS_ENDPOINTS` | two public servers | OpenStreetMap (Overpass) servers to query, comma-separated, tried in order |
-| `api/.env` | `OVERPASS_CACHE_DIR` | `api/var/cache/overpass` | Where map data responses are saved |
-| `api/.env` | `OVERPASS_CACHE_TTL` | `2592000` (30 days) | Seconds a saved response counts as fresh |
-| `api/.env` | `OVERPASS_OFFLINE` | `false` | Answer only from saved responses, never from the network |
+| `api/.env` | `OVERPASS_OFFLINE` | `true` | Answer only from the saved river data, never from the network. Turned off only to fetch or refresh that data (see [`api/data/README.md`](api/data/README.md)) |
+| `api/.env` | `OVERPASS_CACHE_DIR` | `api/data/overpass` | Where the river data is saved |
+| `api/.env` | `OVERPASS_ENDPOINTS` | two public servers | When not offline: OpenStreetMap (Overpass) servers to query, comma-separated, tried in order |
+| `api/.env` | `OVERPASS_CACHE_TTL` | `2592000` (30 days) | When not offline: seconds saved data counts as fresh |
 | `client/.env` | `VITE_API_URL` | `http://localhost:8080` | Base URL of the API |
 
 If you run the API or the frontend on a different port, update the matching variable on the other side.
@@ -203,5 +203,100 @@ curl -X POST http://localhost:8080/api/calculate-distance \
 {
   "status": "error",
   "message": "Invalid latitude for lat1. Value must be between -90 and 90 degrees"
+}
+```
+
+### Rivers
+
+The API offers a fixed set of rivers whose map data is saved in [`api/data`](api/data/README.md). All distances are in meters, and every point is a `[latitude, longitude]` pair.
+
+#### Search rivers
+
+**Endpoint:** `GET /api/rivers?q=<text>`
+
+Finds rivers whose name contains the text, ignoring case and Polish letters (`notec` finds Noteć). Without `q`, lists every river.
+
+```bash
+curl 'http://localhost:8080/api/rivers?q=wis'
+```
+
+```json
+{
+  "status": "success",
+  "data": [
+    { "id": 34392, "name": "Wisła" },
+    { "id": 2020696, "name": "Wisłok" },
+    { "id": 7577712, "name": "Wisłoka" }
+  ]
+}
+```
+
+#### Get a river
+
+**Endpoint:** `GET /api/rivers/{id}`
+
+Returns the course of the river from source to mouth and its total length.
+
+```bash
+curl http://localhost:8080/api/rivers/8974372
+```
+
+```json
+{
+  "status": "success",
+  "data": {
+    "id": 8974372,
+    "name": "Gwda",
+    "length": 142928.6,
+    "points": [[53.85058, 16.669742], [53.8505712, 16.6697115], "..."]
+  }
+}
+```
+
+#### Measure a section
+
+**Endpoint:** `GET /api/rivers/{id}/section?from=<latitude>,<longitude>&to=<latitude>,<longitude>`
+
+Snaps both points to the nearest place on the river and returns the stretch between them, following every bend.
+
+```bash
+curl 'http://localhost:8080/api/rivers/8974372/section?from=53.3667,16.7964&to=53.0551,16.726'
+```
+
+```json
+{
+  "status": "success",
+  "data": {
+    "river": { "id": 8974372, "name": "Gwda" },
+    "length": 57810.7,
+    "downstream": true,
+    "from": { "point": [53.3665124, 16.7965265], "distanceFromSource": 85111.3, "offset": 22.5 },
+    "to": { "point": [53.0548549, 16.7260184], "distanceFromSource": 142922.1, "offset": 27.3 },
+    "points": [[53.3665124, 16.7965265], [53.3662421, 16.7954004], "..."]
+  }
+}
+```
+
+| Field | Meaning |
+|---|---|
+| `length` | Distance along the river between the two snapped points |
+| `downstream` | `false` when `to` lies upstream of `from`; `points` then run against the current |
+| `point` | Where the given point landed on the river |
+| `distanceFromSource` | How far along the river that is |
+| `offset` | How far the given point was from the river |
+
+#### Errors
+
+| Status | When |
+|---|---|
+| `400` | `from` or `to` is missing, is not `latitude,longitude`, or is off the globe |
+| `404` | The river is not one the API offers |
+| `422` | A point is more than 2 km from the river |
+| `503` | The river is offered but its saved data is missing or unusable |
+
+```json
+{
+  "status": "error",
+  "message": "The 'to' point is 301.0 km from the river Gwda; it must be within 2 km"
 }
 ```

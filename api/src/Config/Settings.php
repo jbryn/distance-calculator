@@ -15,15 +15,20 @@ final class Settings
 
     public const DEFAULT_OVERPASS_USER_AGENT = 'distance-calculator (+https://github.com/jbryn/distance-calculator)';
 
-    public const DEFAULT_OVERPASS_CACHE_DIR = __DIR__ . '/../../var/cache/overpass';
+    /** The saved map data that ships with the application */
+    public const DEFAULT_OVERPASS_CACHE_DIR = __DIR__ . '/../../data/overpass';
 
-    /** River geometry changes rarely, so saved responses stay fresh for 30 days */
+    public const DEFAULT_RIVER_CATALOGUE_FILE = __DIR__ . '/../../data/rivers.json';
+
+    /** Only matters when not offline: how long a saved response counts as fresh (30 days) */
     public const DEFAULT_OVERPASS_CACHE_TTL = 30 * 24 * 60 * 60;
 
     /**
-     * @param list<string> $overpassEndpoints Overpass servers, tried in order
-     * @param int          $overpassCacheTtl  seconds a saved Overpass response counts as fresh
-     * @param bool         $overpassOffline   answer only from saved responses, never from the network
+     * @param list<string> $overpassEndpoints  Overpass servers, tried in order
+     * @param int          $overpassCacheTtl   seconds a saved Overpass response counts as fresh
+     * @param bool         $overpassOffline    answer only from saved responses, never from the network;
+     *                                         turned off only to fetch or refresh the saved data
+     * @param string       $riverCatalogueFile the list of rivers the application offers
      */
     public function __construct(
         public readonly bool $debug = false,
@@ -33,7 +38,8 @@ final class Settings
         public readonly string $overpassUserAgent = self::DEFAULT_OVERPASS_USER_AGENT,
         public readonly string $overpassCacheDir = self::DEFAULT_OVERPASS_CACHE_DIR,
         public readonly int $overpassCacheTtl = self::DEFAULT_OVERPASS_CACHE_TTL,
-        public readonly bool $overpassOffline = false,
+        public readonly bool $overpassOffline = true,
+        public readonly string $riverCatalogueFile = self::DEFAULT_RIVER_CATALOGUE_FILE,
     ) {}
 
     /**
@@ -48,7 +54,7 @@ final class Settings
             overpassUserAgent: self::string($env, 'OVERPASS_USER_AGENT', self::DEFAULT_OVERPASS_USER_AGENT),
             overpassCacheDir: self::string($env, 'OVERPASS_CACHE_DIR', self::DEFAULT_OVERPASS_CACHE_DIR),
             overpassCacheTtl: self::positiveInt($env, 'OVERPASS_CACHE_TTL', self::DEFAULT_OVERPASS_CACHE_TTL),
-            overpassOffline: filter_var(self::string($env, 'OVERPASS_OFFLINE', 'false'), FILTER_VALIDATE_BOOLEAN),
+            overpassOffline: filter_var(self::string($env, 'OVERPASS_OFFLINE', 'true'), FILTER_VALIDATE_BOOLEAN),
         );
     }
 

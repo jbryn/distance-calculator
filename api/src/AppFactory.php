@@ -8,6 +8,7 @@ use DI\Container;
 use DI\ContainerBuilder;
 use Jbryn\DistanceCalculator\Config\Settings;
 use Jbryn\DistanceCalculator\Controller\DistanceController;
+use Jbryn\DistanceCalculator\Controller\RiverController;
 use Jbryn\DistanceCalculator\Handler\JsonErrorHandler;
 use Jbryn\DistanceCalculator\Middleware\CorsMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -60,5 +61,9 @@ final class AppFactory
         });
 
         $app->post('/api/calculate-distance', DistanceController::class . ':calculate');
+
+        $app->get('/api/rivers', RiverController::class . ':search');
+        $app->get('/api/rivers/{id:[0-9]{1,15}}', RiverController::class . ':show');
+        $app->get('/api/rivers/{id:[0-9]{1,15}}/section', RiverController::class . ':section');
     }
 }

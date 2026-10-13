@@ -67,7 +67,8 @@ class SettingsTest extends TestCase
         $this->assertSame(Settings::DEFAULT_OVERPASS_USER_AGENT, $settings->overpassUserAgent);
         $this->assertSame(Settings::DEFAULT_OVERPASS_CACHE_DIR, $settings->overpassCacheDir);
         $this->assertSame(30 * 24 * 60 * 60, $settings->overpassCacheTtl);
-        $this->assertFalse($settings->overpassOffline);
+        $this->assertTrue($settings->overpassOffline);
+        $this->assertSame(Settings::DEFAULT_RIVER_CATALOGUE_FILE, $settings->riverCatalogueFile);
     }
 
     public function testReadsOverpassValuesFromEnvironment(): void
@@ -77,14 +78,14 @@ class SettingsTest extends TestCase
             'OVERPASS_USER_AGENT' => 'my-app (me@example.com)',
             'OVERPASS_CACHE_DIR' => '/tmp/overpass',
             'OVERPASS_CACHE_TTL' => '3600',
-            'OVERPASS_OFFLINE' => 'true',
+            'OVERPASS_OFFLINE' => 'false',
         ]);
 
         $this->assertSame(['https://a.example/api', 'https://b.example/api'], $settings->overpassEndpoints);
         $this->assertSame('my-app (me@example.com)', $settings->overpassUserAgent);
         $this->assertSame('/tmp/overpass', $settings->overpassCacheDir);
         $this->assertSame(3600, $settings->overpassCacheTtl);
-        $this->assertTrue($settings->overpassOffline);
+        $this->assertFalse($settings->overpassOffline);
     }
 
     #[DataProvider('unusableCacheLifetimes')]

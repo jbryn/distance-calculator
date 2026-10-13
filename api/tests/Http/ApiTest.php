@@ -4,20 +4,19 @@ declare(strict_types=1);
 
 namespace Jbryn\DistanceCalculator\Tests\Http;
 
-use Jbryn\DistanceCalculator\AppFactory;
 use Jbryn\DistanceCalculator\Config\Settings;
 use Jbryn\DistanceCalculator\Service\DistanceCalculator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
-use Slim\Psr7\Factory\ServerRequestFactory;
 
 /**
  * Sends requests through the whole application: middleware, routing, controllers and error handling.
  */
 class ApiTest extends TestCase
 {
+    use SendsRequests;
+
     private const VALID_BODY = '{"lat1": 0, "lon1": 0, "lat2": 0, "lon2": 180}';
 
     public function testHealthCheck(): void
@@ -170,37 +169,6 @@ class ApiTest extends TestCase
 
         $this->assertSame(500, $response->getStatusCode());
         $this->assertSame(['status' => 'error', 'message' => 'Something broke'], $this->json($response));
-    }
-
-    /**
-     * @param array<string, mixed> $definitions
-     */
-    private function request(
-        string $method,
-        string $path,
-        ?string $body = null,
-        ?Settings $settings = null,
-        array $definitions = [],
-    ): ResponseInterface {
-        $request = (new ServerRequestFactory())->createServerRequest($method, $path);
-
-        if ($body !== null) {
-            $request = $request->withHeader('Content-Type', 'application/json');
-            $request->getBody()->write($body);
-        }
-
-        return AppFactory::create($settings ?? new Settings(logErrors: false), $definitions)->handle($request);
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    private function json(ResponseInterface $response): array
-    {
-        $data = json_decode((string) $response->getBody(), true);
-        self::assertIsArray($data);
-
-        return $data;
     }
 
     private function failingCalculator(): DistanceCalculator
