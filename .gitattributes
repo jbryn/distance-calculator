@@ -1,0 +1,2 @@
+# Saved API responses: collapse them in pull request diffs
+/api/tests/fixtures/overpass/*.json linguist-generated
