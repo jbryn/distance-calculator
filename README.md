@@ -1,309 +1,124 @@
-# Geographic Distance Calculator
+# Distance Calculator
 
 [![CI](https://github.com/jbryn/distance-calculator/actions/workflows/ci.yml/badge.svg)](https://github.com/jbryn/distance-calculator/actions/workflows/ci.yml)
 
-A tool for planning kayaking trips: pick a section of a river and get the distance along its course, following every bend, rather than the straight line between two points. River geometry comes from OpenStreetMap. Built with a PHP backend (Slim Framework) and a Vue.js frontend.
+A web app for planning kayaking trips. Pick a river and see it on a map; the next steps let you pick a start and a finish and get the distance along the river, following every bend, with the weirs, dams and landing places on the way.
 
-The project started as a calculator for the straight-line distance between two coordinates and is being rebuilt around rivers. See [Status](#status) for what works today.
+![The Gwda river shown on the map, with its length and numbers of obstacles and access points in the side panel](docs/screenshot.jpg)
 
 ## Status
 
-Work is tracked in the [Kayak river tool v1](https://github.com/jbryn/distance-calculator/milestone/1) milestone, one issue per pull request.
+Work in progress, tracked in the [Kayak river tool v1](https://github.com/jbryn/distance-calculator/milestone/1) milestone with one issue per pull request.
 
-**Working now**
+| | |
+|---|---|
+| **Works now** | Search 15 Polish rivers and show one on the map with its length, obstacles and access points. Light and dark themes; desktop and phone layouts. The API can already measure any section between two points. |
+| **Next** | Click a start and a finish on the map to measure a section; trip details (km or miles, paddling time, obstacles on the route); shareable links; GPX export; Docker and a public deployment. |
 
-- River API: search rivers by name, fetch a river's course and length, and measure the section between two points snapped to the river (see [Rivers](#rivers))
-- 15 Polish rivers, served from map data saved in the repository (see [`api/data`](api/data/README.md)); no request depends on an external service
-- Distances checked against official river kilometrage from IMGW-PIB on 33 stretches between gauging stations: 30 within the reference tolerance (3%, or 6% on difficult reaches), 21 within 0.5%
-- Detection of rivers whose map data has gaps; these are reported and not offered
-- Obstacles (weirs, dams, locks, rapids, waterfalls) and access points (put-ins, slipways, bridges) along a river and on any section of it, each with its distance along the river
-- Web client: search for a river and see it on an OpenStreetMap map, with its length and the number of obstacles and access points; light and dark themes; layout for desktop and phone
+## How it works
 
-**Planned**
+1. **River data comes from OpenStreetMap.** A river there is a list of separate pieces. For each river on offer, the pieces and the features along it (weirs, dams, locks, bridges, landing places) are downloaded once through the Overpass API and saved in the repository. The app never waits on an outside service.
+2. **The API joins the pieces into one line** from source to mouth, refuses rivers whose map data has gaps, and places each feature on the line by its distance from the source.
+3. **A section is measured along that line.** Both points are snapped to the nearest place on the river, and the distance between them is the length of the line in between.
+4. **The web client** searches the rivers, draws the chosen one on a Leaflet map with OpenStreetMap tiles, and shows its details.
 
-- Section selection: click a start and a finish on the map and see the section highlighted
-- Trip details: kilometers or miles, estimated paddling time, obstacles on the route
-- Shareable links and GPX export
-- Docker setup and a public deployment
+The measurements are checked against official river kilometrage from IMGW-PIB, the Polish hydrological service: on 33 stretches between gauging stations, 30 are within the reference tolerance (3%, or 6% on difficult reaches) and 21 within 0.5%.
 
-## Technologies Used
+## Tech stack
 
-### Backend
+| Part | Technologies |
+|---|---|
+| API (`api/`) | PHP 8.1+, Slim 4, PHP-DI, Guzzle (only for refreshing river data) |
+| Web client (`client/`) | Vue 3, TypeScript, Pinia, Leaflet, Tailwind CSS, Vite |
+| Tests | PHPUnit, Vitest, Cypress |
+| Code quality | PHPStan (strictest level), PHP-CS-Fixer, ESLint, Prettier |
+| CI | GitHub Actions: tests on PHP 8.1 and 8.4, linting, static analysis and end-to-end tests on every pull request |
 
-- PHP 8.1+
-- Slim Framework 4 with PHP-DI
-- Guzzle for HTTP requests to the Overpass API (used only when refreshing river data)
-- PHPUnit, PHPStan (strictest level) and PHP-CS-Fixer
+## Quick start
 
-### Frontend
-
-- Vue.js 3 with TypeScript, Pinia for state
-- Leaflet with OpenStreetMap tiles for the map
-- Tailwind CSS
-- Vite as build tool
-- Vitest for unit tests
-- Cypress for end-to-end tests
-- ESLint and Prettier
-
-### Tooling
-
-- GitHub Actions: tests on PHP 8.1 and 8.4, linting, static analysis and end-to-end tests on every pull request
-
-## Setup and Installation
-
-1. Clone the repository
+You need PHP 8.1 or newer with Composer, and Node.js 22 or newer.
 
 ```bash
 git clone https://github.com/jbryn/distance-calculator.git
 cd distance-calculator
 ```
 
-2. Backend setup
+Start the API (terminal 1):
 
 ```bash
 cd api
 composer install
+composer start          # http://localhost:8080
 ```
 
-3. Configure environment variables (optional)
-
-Both parts run with sensible local defaults, so this step is only needed to change them.
-
-```bash
-cp api/.env.example api/.env
-cp client/.env.example client/.env
-```
-
-| File | Variable | Default | Purpose |
-|---|---|---|---|
-| `api/.env` | `APP_DEBUG` | `false` | Include error details in API error responses |
-| `api/.env` | `CORS_ORIGIN` | `http://localhost:5173` | Frontend origin allowed to call the API |
-| `api/.env` | `OVERPASS_OFFLINE` | `true` | Answer only from the saved river data, never from the network. Turned off only to fetch or refresh that data (see [`api/data/README.md`](api/data/README.md)) |
-| `api/.env` | `OVERPASS_CACHE_DIR` | `api/data/overpass` | Where the river data is saved |
-| `api/.env` | `OVERPASS_ENDPOINTS` | two public servers | When not offline: OpenStreetMap (Overpass) servers to query, comma-separated, tried in order |
-| `api/.env` | `OVERPASS_CACHE_TTL` | `2592000` (30 days) | When not offline: seconds saved data counts as fresh |
-| `client/.env` | `VITE_API_URL` | `http://localhost:8080` | Base URL of the API |
-
-If you run the API or the frontend on a different port, update the matching variable on the other side.
-
-4. Frontend setup
+Start the web client (terminal 2):
 
 ```bash
 cd client
 npm install
+npm run dev             # http://localhost:5173
 ```
 
-## Running the Application
+Open http://localhost:5173 and pick a river.
 
-### Backend Development Server
+## Project structure
 
-```bash
-cd api
-php -S localhost:8080 -t public
+```
+api/
+  data/          saved river data: the catalogue of rivers and the OpenStreetMap responses
+  src/
+    Controller/  HTTP endpoints
+    Geo/         points and lines on the globe: distances, snapping, sections
+    Overpass/    client for the OpenStreetMap Overpass API, with a file cache
+    River/       joining pieces into a river, features along it, the catalogue
+  bin/           command for refreshing the river data
+  tests/
+client/
+  src/
+    api/         typed API client
+    components/  Vue components
+    composables/ search and theme logic
+    stores/      Pinia store for the selected river
+  cypress/       end-to-end tests
+docs/            API reference
 ```
 
-The API will be available at `http://localhost:8080`
-
-### Frontend Development Server
-
-```bash
-cd client
-npm run dev
-```
-
-The frontend application will be available at `http://localhost:5173`
-
-## Code Quality
+## Development
 
 | Command | Where | What it does |
 |---|---|---|
-| `composer lint` | `api/` | PHPStan static analysis (strictest level) and a PHP-CS-Fixer style check |
+| `composer test` | `api/` | PHPUnit tests |
+| `composer lint` | `api/` | PHPStan and a code style check |
 | `composer format` | `api/` | Fixes PHP code style |
-| `npm run lint` | `client/` | ESLint for TypeScript and Vue |
-| `npm run format` | `client/` | Formats the client with Prettier |
+| `composer rivers:fetch` | `api/` | Downloads fresh river data from OpenStreetMap (see [`api/data/README.md`](api/data/README.md)) |
+| `npm run test` | `client/` | Vitest unit tests (`npm run test:coverage` for a coverage report) |
+| `npm run e2e` | `client/` | Cypress end-to-end tests; both servers from the quick start must be running. `npm run e2e:open` runs them interactively. Map tiles come from a fixture, not from OpenStreetMap. |
+| `npm run lint` | `client/` | ESLint |
+| `npm run format` | `client/` | Prettier |
 
-CI runs all the checks on every pull request.
+### Configuration
 
-## Testing
+Both parts work with their defaults. To change them, copy `api/.env.example` to `api/.env` and `client/.env.example` to `client/.env`.
 
-### Backend Tests
+| File | Variable | Default | Purpose |
+|---|---|---|---|
+| `api/.env` | `APP_DEBUG` | `false` | Include error details in API error responses |
+| `api/.env` | `CORS_ORIGIN` | `http://localhost:5173` | Web client origin allowed to call the API |
+| `api/.env` | `OVERPASS_OFFLINE` | `true` | Answer only from the saved river data. Turned off only to fetch new data |
+| `api/.env` | `OVERPASS_CACHE_DIR` | `api/data/overpass` | Where the river data is saved |
+| `api/.env` | `OVERPASS_ENDPOINTS` | two public servers | When fetching: Overpass servers to try, comma-separated |
+| `api/.env` | `OVERPASS_CACHE_TTL` | `2592000` (30 days) | When not offline: how long saved data counts as fresh |
+| `client/.env` | `VITE_API_URL` | `http://localhost:8080` | Address of the API |
 
-```bash
-cd api
-composer test
-```
+If you run either part on a different port, update the matching variable on the other side.
 
-### Frontend Tests
+## Documentation
 
-Run the tests:
+- [API reference](docs/api.md): endpoints, responses and errors
+- [River data](api/data/README.md): which rivers are offered, the saved files, and how to add or refresh a river
+- [Test fixtures](api/tests/fixtures/README.md): the reference distances from IMGW-PIB and a river kept as a bad example
 
-```bash
-cd client
-npm run test
-```
+## Data sources
 
-Run tests with coverage report:
-
-```bash
-cd client
-npm run test:coverage
-```
-
-### End-to-End Tests
-
-Cypress tests drive the real frontend against the real API, so both development servers must be running first (see [Running the Application](#running-the-application)).
-
-```bash
-cd client
-npm run e2e
-```
-
-Use `npm run e2e:open` to run them interactively in the Cypress app. Map tiles are served from a fixture during the tests, so they do not load anything from OpenStreetMap.
-
-## API Endpoints
-
-### Health Check
-
-**Endpoint:** `GET /`
-
-**Test with curl:**
-
-```bash
-curl http://localhost:8080/
-```
-
-**Response:**
-
-```json
-{
-  "status": "API is working!"
-}
-```
-
-### Rivers
-
-The API offers a fixed set of rivers whose map data is saved in [`api/data`](api/data/README.md). All distances are in meters, and every point is a `[latitude, longitude]` pair.
-
-#### Search rivers
-
-**Endpoint:** `GET /api/rivers?q=<text>`
-
-Finds rivers whose name contains the text, ignoring case and Polish letters (`notec` finds Noteć). Without `q`, lists every river.
-
-```bash
-curl 'http://localhost:8080/api/rivers?q=wis'
-```
-
-```json
-{
-  "status": "success",
-  "data": [
-    { "id": 34392, "name": "Wisła" },
-    { "id": 2020696, "name": "Wisłok" },
-    { "id": 7577712, "name": "Wisłoka" }
-  ]
-}
-```
-
-#### Get a river
-
-**Endpoint:** `GET /api/rivers/{id}`
-
-Returns the course of the river from source to mouth, its total length, and the obstacles and access points along it in downstream order.
-
-```bash
-curl http://localhost:8080/api/rivers/8974372
-```
-
-```json
-{
-  "status": "success",
-  "data": {
-    "id": 8974372,
-    "name": "Gwda",
-    "length": 142928.6,
-    "points": [[53.85058, 16.669742], [53.8505712, 16.6697115], "..."],
-    "features": [
-      {
-        "kind": "bridge",
-        "category": "access",
-        "name": null,
-        "point": [53.8505192, 16.6694025],
-        "distanceFromSource": 23.8
-      },
-      "..."
-    ]
-  }
-}
-```
-
-Each feature has:
-
-| Field | Meaning |
-|---|---|
-| `kind` | `weir`, `dam`, `lock`, `rapids`, `waterfall`, `put_in`, `slipway` or `bridge` |
-| `category` | `obstacle` (the first five kinds) or `access` (the last three) |
-| `name` | Name from OpenStreetMap, or `null` |
-| `point` | Where the feature meets the river |
-| `distanceFromSource` | How far along the river that is |
-
-Features come from OpenStreetMap and are only as complete as the map: the absence of an obstacle in the list does not mean the river is clear.
-
-#### Measure a section
-
-**Endpoint:** `GET /api/rivers/{id}/section?from=<latitude>,<longitude>&to=<latitude>,<longitude>`
-
-Snaps both points to the nearest place on the river and returns the stretch between them, following every bend, with the features met on the way.
-
-```bash
-curl 'http://localhost:8080/api/rivers/8974372/section?from=53.3667,16.7964&to=53.0551,16.726'
-```
-
-```json
-{
-  "status": "success",
-  "data": {
-    "river": { "id": 8974372, "name": "Gwda" },
-    "length": 57810.7,
-    "downstream": true,
-    "from": { "point": [53.3665124, 16.7965265], "distanceFromSource": 85111.3, "offset": 22.5 },
-    "to": { "point": [53.0548549, 16.7260184], "distanceFromSource": 142922.1, "offset": 27.3 },
-    "points": [[53.3665124, 16.7965265], [53.3662421, 16.7954004], "..."],
-    "features": [
-      {
-        "kind": "bridge",
-        "category": "access",
-        "name": null,
-        "point": [53.3646679, 16.7940129],
-        "distance": 278.3
-      },
-      "..."
-    ]
-  }
-}
-```
-
-| Field | Meaning |
-|---|---|
-| `length` | Distance along the river between the two snapped points |
-| `downstream` | `false` when `to` lies upstream of `from`; `points` and `features` then run against the current |
-| `features` | As for a river, limited to the section and in the order they are met; `distance` is measured from the start of the section |
-| `point` | Where the given point landed on the river |
-| `distanceFromSource` | How far along the river that is |
-| `offset` | How far the given point was from the river |
-
-#### Errors
-
-| Status | When |
-|---|---|
-| `400` | `from` or `to` is missing, is not `latitude,longitude`, or is off the globe |
-| `404` | The river is not one the API offers |
-| `422` | A point is more than 2 km from the river |
-| `503` | The river is offered but its saved data is missing or unusable |
-
-```json
-{
-  "status": "error",
-  "message": "The 'to' point is 301.0 km from the river Gwda; it must be within 2 km"
-}
-```
+- Map data and map tiles © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors, available under the Open Database License.
+- Reference river kilometrage: Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy (IMGW-PIB).
