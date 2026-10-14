@@ -11,13 +11,8 @@ use Jbryn\DistanceCalculator\Overpass\OfflineOverpassClient;
 use Jbryn\DistanceCalculator\Overpass\OverpassClient;
 use Jbryn\DistanceCalculator\Overpass\QueryCache;
 use Jbryn\DistanceCalculator\River\RiverCatalogue;
-use Jbryn\DistanceCalculator\Service\DistanceCalculator;
-use Jbryn\DistanceCalculator\Service\Validator;
 
 return [
-    DistanceCalculator::class => \DI\create(DistanceCalculator::class),
-    Validator::class => \DI\create(Validator::class),
-
     RiverCatalogue::class => static fn(Settings $settings): RiverCatalogue => RiverCatalogue::fromFile(
         $settings->riverCatalogueFile,
     ),

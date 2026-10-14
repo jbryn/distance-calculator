@@ -18,3 +18,12 @@
     @apply bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
   }
 }
+
+/* Map tiles are only drawn light; in the dark theme they are inverted to match */
+.dark .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9);
+}
+
+.dark .leaflet-container {
+  background: var(--color-slate-800);
+}
