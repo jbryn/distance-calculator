@@ -16,11 +16,11 @@ Work is tracked in the [Kayak river tool v1](https://github.com/jbryn/distance-c
 - 15 Polish rivers, served from map data saved in the repository (see [`api/data`](api/data/README.md)); no request depends on an external service
 - Distances checked against official river kilometrage from IMGW-PIB on 33 stretches between gauging stations: 30 within the reference tolerance (3%, or 6% on difficult reaches), 21 within 0.5%
 - Detection of rivers whose map data has gaps; these are reported and not offered
+- Obstacles (weirs, dams, locks, rapids, waterfalls) and access points (put-ins, slipways, bridges) along a river and on any section of it, each with its distance along the river
 - The original straight-line calculator, in the API and in the web client
 
 **Planned**
 
-- Obstacles and access points along a river: weirs, dams, locks, put-ins, bridges
 - Map interface: search for a river, click a start and a finish, see the section highlighted
 - Trip details: kilometers or miles, estimated paddling time, obstacles on the route
 - Shareable links and GPX export
@@ -253,7 +253,7 @@ curl 'http://localhost:8080/api/rivers?q=wis'
 
 **Endpoint:** `GET /api/rivers/{id}`
 
-Returns the course of the river from source to mouth and its total length.
+Returns the course of the river from source to mouth, its total length, and the obstacles and access points along it in downstream order.
 
 ```bash
 curl http://localhost:8080/api/rivers/8974372
@@ -266,16 +266,38 @@ curl http://localhost:8080/api/rivers/8974372
     "id": 8974372,
     "name": "Gwda",
     "length": 142928.6,
-    "points": [[53.85058, 16.669742], [53.8505712, 16.6697115], "..."]
+    "points": [[53.85058, 16.669742], [53.8505712, 16.6697115], "..."],
+    "features": [
+      {
+        "kind": "bridge",
+        "category": "access",
+        "name": null,
+        "point": [53.8505192, 16.6694025],
+        "distanceFromSource": 23.8
+      },
+      "..."
+    ]
   }
 }
 ```
+
+Each feature has:
+
+| Field | Meaning |
+|---|---|
+| `kind` | `weir`, `dam`, `lock`, `rapids`, `waterfall`, `put_in`, `slipway` or `bridge` |
+| `category` | `obstacle` (the first five kinds) or `access` (the last three) |
+| `name` | Name from OpenStreetMap, or `null` |
+| `point` | Where the feature meets the river |
+| `distanceFromSource` | How far along the river that is |
+
+Features come from OpenStreetMap and are only as complete as the map: the absence of an obstacle in the list does not mean the river is clear.
 
 #### Measure a section
 
 **Endpoint:** `GET /api/rivers/{id}/section?from=<latitude>,<longitude>&to=<latitude>,<longitude>`
 
-Snaps both points to the nearest place on the river and returns the stretch between them, following every bend.
+Snaps both points to the nearest place on the river and returns the stretch between them, following every bend, with the features met on the way.
 
 ```bash
 curl 'http://localhost:8080/api/rivers/8974372/section?from=53.3667,16.7964&to=53.0551,16.726'
@@ -290,7 +312,17 @@ curl 'http://localhost:8080/api/rivers/8974372/section?from=53.3667,16.7964&to=5
     "downstream": true,
     "from": { "point": [53.3665124, 16.7965265], "distanceFromSource": 85111.3, "offset": 22.5 },
     "to": { "point": [53.0548549, 16.7260184], "distanceFromSource": 142922.1, "offset": 27.3 },
-    "points": [[53.3665124, 16.7965265], [53.3662421, 16.7954004], "..."]
+    "points": [[53.3665124, 16.7965265], [53.3662421, 16.7954004], "..."],
+    "features": [
+      {
+        "kind": "bridge",
+        "category": "access",
+        "name": null,
+        "point": [53.3646679, 16.7940129],
+        "distance": 278.3
+      },
+      "..."
+    ]
   }
 }
 ```
@@ -298,7 +330,8 @@ curl 'http://localhost:8080/api/rivers/8974372/section?from=53.3667,16.7964&to=5
 | Field | Meaning |
 |---|---|
 | `length` | Distance along the river between the two snapped points |
-| `downstream` | `false` when `to` lies upstream of `from`; `points` then run against the current |
+| `downstream` | `false` when `to` lies upstream of `from`; `points` and `features` then run against the current |
+| `features` | As for a river, limited to the section and in the order they are met; `distance` is measured from the start of the section |
 | `point` | Where the given point landed on the river |
 | `distanceFromSource` | How far along the river that is |
 | `offset` | How far the given point was from the river |

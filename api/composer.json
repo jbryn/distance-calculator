@@ -44,7 +44,11 @@
             "@analyse",
             "@format:check"
         ],
-        "start": "php -S localhost:8080 -t public"
+        "start": "php -S localhost:8080 -t public",
+        "rivers:fetch": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php bin/fetch-rivers.php"
+        ]
     },
     "config": {
         "platform": {

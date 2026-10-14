@@ -6,7 +6,12 @@ namespace Jbryn\DistanceCalculator\Tests\River;
 
 use Jbryn\DistanceCalculator\Config\Settings;
 use Jbryn\DistanceCalculator\Overpass\OverpassClient;
+use Jbryn\DistanceCalculator\Overpass\OverpassUnavailableException;
+use Jbryn\DistanceCalculator\River\FeatureKind;
+use Jbryn\DistanceCalculator\River\FeatureLocator;
+use Jbryn\DistanceCalculator\River\MapFeature;
 use Jbryn\DistanceCalculator\River\RiverCatalogue;
+use Jbryn\DistanceCalculator\River\RiverFeature;
 use Jbryn\DistanceCalculator\River\RiverNotFoundException;
 use Jbryn\DistanceCalculator\River\RiverRelation;
 use Jbryn\DistanceCalculator\River\RiverRepository;
@@ -35,13 +40,58 @@ class RiverRepositoryTest extends TestCase
         $this->assertSame('Gwda (catalogue)', self::repository(RiverFixtures::client())->get(self::GWDA)->name);
     }
 
-    public function testAsksOverpassForTheRelation(): void
+    public function testAsksOverpassForTheCourseAndThenForTheFeatures(): void
     {
         $overpass = new FakeOverpassClient([self::relation()]);
 
         self::repository($overpass)->get(self::GWDA);
 
-        $this->assertSame([RiverRelation::overpassQuery(self::GWDA)], $overpass->queries);
+        $this->assertSame(
+            [RiverRelation::overpassQuery(self::GWDA), MapFeature::overpassQuery(self::GWDA)],
+            $overpass->queries,
+        );
+    }
+
+    public function testPlacesTheFeaturesOnTheRiver(): void
+    {
+        // The river runs from (53.5, 16.5) to (53.4, 16.6); the weir is at its midpoint, the bridge at its end
+        $river = self::repository(self::answering([self::relation()], [
+            ['type' => 'way', 'id' => 7, 'center' => ['lat' => 53.4, 'lon' => 16.6], 'tags' => ['highway' => 'track', 'bridge' => 'yes']],
+            ['type' => 'node', 'id' => 8, 'lat' => 53.45, 'lon' => 16.55, 'tags' => ['waterway' => 'weir', 'name' => 'Jaz']],
+            ['type' => 'node', 'id' => 9, 'lat' => 53.45, 'lon' => 16.55, 'tags' => ['amenity' => 'bench']],
+        ]))->get(self::GWDA);
+
+        $this->assertCount(2, $river->features);
+
+        $this->assertSame(FeatureKind::Weir, $river->features[0]->kind);
+        $this->assertSame('Jaz', $river->features[0]->name);
+        $this->assertEqualsWithDelta($river->line->length() / 2, $river->features[0]->distance, 1.0);
+
+        $this->assertSame(FeatureKind::Bridge, $river->features[1]->kind);
+        $this->assertEqualsWithDelta($river->line->length(), $river->features[1]->distance, 0.01);
+    }
+
+    public function testARiverWithNothingAlongItHasNoFeatures(): void
+    {
+        $this->assertSame([], self::repository(self::answering([self::relation()], []))->get(self::GWDA)->features);
+    }
+
+    public function testUnavailableWhenTheFeaturesCannotBeObtained(): void
+    {
+        $this->expectException(RiverUnavailableException::class);
+        $this->expectExceptionMessage('No obstacle data for river 8974372: refused');
+
+        self::repository(self::answering([self::relation()], null))->get(self::GWDA);
+    }
+
+    public function testUnavailableWhenAFeatureHasNoPosition(): void
+    {
+        $this->expectException(RiverUnavailableException::class);
+        $this->expectExceptionMessage('Unusable obstacle data for river 8974372: A map feature has no coordinates');
+
+        self::repository(self::answering([self::relation()], [
+            ['type' => 'way', 'id' => 7, 'tags' => ['waterway' => 'weir']],
+        ]))->get(self::GWDA);
     }
 
     public function testARiverOutsideTheCatalogueIsNotFoundAndNotLookedUp(): void
@@ -106,17 +156,94 @@ class RiverRepositoryTest extends TestCase
         self::repository(RiverFixtures::client())->get(self::SOLA);
     }
 
-    public function testEveryRiverInTheShippedCatalogueCanBeBuiltFromTheShippedData(): void
+    #[DataProvider('shippedRivers')]
+    public function testBuildsEveryShippedRiverWithItsFeatures(int $id, int $features, int $obstacles): void
     {
-        $settings = new Settings();
-        $catalogue = RiverCatalogue::fromFile($settings->riverCatalogueFile);
-        $repository = new RiverRepository($catalogue, RiverFixtures::shippedOnlyClient(), new RiverStitcher());
+        $river = self::shipped()->get($id);
 
-        foreach ($catalogue->search('') as $summary) {
-            $river = $repository->get($summary->id);
+        $this->assertGreaterThan(100_000, $river->line->length());
+        $this->assertCount($features, $river->features);
+        $this->assertCount($obstacles, array_filter(
+            $river->features,
+            static fn(RiverFeature $feature): bool => $feature->kind->category() === 'obstacle',
+        ));
 
-            $this->assertGreaterThan(100_000, $river->line->length(), $summary->name);
+        foreach ($river->features as $index => $feature) {
+            $this->assertGreaterThanOrEqual(0.0, $feature->distance);
+            $this->assertLessThanOrEqual($river->line->length(), $feature->distance);
+            $this->assertGreaterThanOrEqual($river->features[max(0, $index - 1)]->distance, $feature->distance);
         }
+    }
+
+    /**
+     * Relation id, features placed on the river, and how many of them are obstacles.
+     *
+     * @return array<string, array{int, int, int}>
+     */
+    public static function shippedRivers(): array
+    {
+        return [
+            'Biała (Tarnowska)' => [19995496, 57, 4],
+            'Biebrza' => [6378830, 15, 1],
+            'Bóbr' => [1582509, 241, 118],
+            'Dunajec' => [2822415, 58, 11],
+            'Gwda' => [8974372, 52, 16],
+            'Noteć' => [6124894, 115, 34],
+            'Odra' => [387605, 207, 55],
+            'Pasłęka' => [7581082, 46, 5],
+            'Raba' => [2473086, 86, 8],
+            'Rega' => [12759496, 80, 18],
+            'Warta' => [3272339, 226, 51],
+            'Wieprz' => [2297716, 97, 8],
+            'Wisła' => [34392, 292, 173],
+            'Wisłok' => [2020696, 91, 6],
+            'Wisłoka' => [7577712, 55, 10],
+        ];
+    }
+
+    public function testEveryRiverInTheShippedCatalogueIsInTheTableAbove(): void
+    {
+        $catalogue = RiverCatalogue::fromFile((new Settings())->riverCatalogueFile);
+
+        $this->assertEqualsCanonicalizing(
+            array_map(static fn(RiverSummary $river): string => $river->name, $catalogue->search('')),
+            array_keys(self::shippedRivers()),
+        );
+    }
+
+    private static function shipped(): RiverRepository
+    {
+        return new RiverRepository(
+            RiverCatalogue::fromFile((new Settings())->riverCatalogueFile),
+            RiverFixtures::shippedOnlyClient(),
+            new RiverStitcher(),
+            new FeatureLocator(),
+        );
+    }
+
+    /**
+     * A client that answers the query for the course with one list of elements and the
+     * query for the features with another, or refuses a query whose answer is null.
+     *
+     * @param list<array<string, mixed>>|null $course
+     * @param list<array<string, mixed>>|null $features
+     */
+    private static function answering(?array $course, ?array $features): OverpassClient
+    {
+        return new class ($course, $features) implements OverpassClient {
+            /**
+             * @param list<array<string, mixed>>|null $course
+             * @param list<array<string, mixed>>|null $features
+             */
+            public function __construct(private readonly ?array $course, private readonly ?array $features) {}
+
+            public function query(string $query): array
+            {
+                $answer = str_contains($query, 'out body geom') ? $this->course : $this->features;
+
+                return $answer ?? throw new OverpassUnavailableException('refused');
+            }
+        };
     }
 
     private static function repository(OverpassClient $overpass): RiverRepository
@@ -126,7 +253,7 @@ class RiverRepositoryTest extends TestCase
             new RiverSummary(self::SOLA, 'Soła'),
         ]);
 
-        return new RiverRepository($catalogue, $overpass, new RiverStitcher());
+        return new RiverRepository($catalogue, $overpass, new RiverStitcher(), new FeatureLocator());
     }
 
     /**

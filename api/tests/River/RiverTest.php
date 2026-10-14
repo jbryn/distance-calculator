@@ -6,8 +6,10 @@ namespace Jbryn\DistanceCalculator\Tests\River;
 
 use Jbryn\DistanceCalculator\Geo\Point;
 use Jbryn\DistanceCalculator\Geo\Polyline;
+use Jbryn\DistanceCalculator\River\FeatureKind;
 use Jbryn\DistanceCalculator\River\PointTooFarException;
 use Jbryn\DistanceCalculator\River\River;
+use Jbryn\DistanceCalculator\River\RiverFeature;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -100,13 +102,84 @@ class RiverTest extends TestCase
         self::river()->section(new Point(0, 1), new Point(1, 2));
     }
 
+    public function testSectionListsTheFeaturesOnItWithTheirDistanceFromTheStart(): void
+    {
+        $section = self::river()->section(new Point(0, 0.75), new Point(0, 2.75));
+
+        $this->assertSame(['weir', 'bridge', 'put-in'], self::names($section->features));
+        $this->assertEqualsWithDelta(0.25 * self::DEGREE, $section->features[0]->distance, self::DELTA);
+        $this->assertEqualsWithDelta(0.75 * self::DEGREE, $section->features[1]->distance, self::DELTA);
+        $this->assertEqualsWithDelta(1.75 * self::DEGREE, $section->features[2]->distance, self::DELTA);
+
+        $this->assertSame(FeatureKind::Weir, $section->features[0]->kind);
+        $this->assertEquals(new Point(0, 1), $section->features[0]->point);
+    }
+
+    public function testFeaturesOutsideTheSectionAreLeftOut(): void
+    {
+        $section = self::river()->section(new Point(0, 1.2), new Point(0, 2.2));
+
+        $this->assertSame(['bridge'], self::names($section->features));
+    }
+
+    public function testASectionAgainstTheCurrentMeetsTheFeaturesInReverse(): void
+    {
+        $section = self::river()->section(new Point(0, 2.75), new Point(0, 0.75));
+
+        $this->assertSame(['put-in', 'bridge', 'weir'], self::names($section->features));
+        $this->assertEqualsWithDelta(0.25 * self::DEGREE, $section->features[0]->distance, self::DELTA);
+        $this->assertEqualsWithDelta(1.25 * self::DEGREE, $section->features[1]->distance, self::DELTA);
+        $this->assertEqualsWithDelta(1.75 * self::DEGREE, $section->features[2]->distance, self::DELTA);
+    }
+
+    public function testAFeatureExactlyAtAnEndOfTheSectionIsIncluded(): void
+    {
+        $section = self::river()->section(new Point(0, 1), new Point(0, 1.5));
+
+        $this->assertSame(['weir', 'bridge'], self::names($section->features));
+        $this->assertSame(0.0, $section->features[0]->distance);
+        $this->assertEqualsWithDelta(0.5 * self::DEGREE, $section->features[1]->distance, self::DELTA);
+    }
+
+    public function testASectionWithoutFeaturesHasAnEmptyList(): void
+    {
+        $this->assertSame([], self::river()->section(new Point(0, 0.1), new Point(0, 0.3))->features);
+    }
+
+    public function testARiverWithoutFeatureDataHasNoneOnItsSections(): void
+    {
+        $river = new River(1, 'Testowa', new Polyline([new Point(0, 0), new Point(0, 3)]));
+
+        $this->assertSame([], $river->section(new Point(0, 1), new Point(0, 2))->features);
+    }
+
+    /**
+     * A weir at longitude 0.5 (the source side), another at 1, a bridge at 1.5 and a put-in at 2.5.
+     */
     private static function river(): River
     {
-        return new River(1, 'Testowa', new Polyline([
+        $line = new Polyline([
             new Point(0, 0),
             new Point(0, 1),
             new Point(0, 2),
             new Point(0, 3),
-        ]));
+        ]);
+
+        return new River(1, 'Testowa', $line, [
+            new RiverFeature(FeatureKind::Weir, 'upper weir', new Point(0, 0.5), 0.5 * self::DEGREE),
+            new RiverFeature(FeatureKind::Weir, 'weir', new Point(0, 1), 1.0 * self::DEGREE),
+            new RiverFeature(FeatureKind::Bridge, 'bridge', new Point(0, 1.5), 1.5 * self::DEGREE),
+            new RiverFeature(FeatureKind::PutIn, 'put-in', new Point(0, 2.5), 2.5 * self::DEGREE),
+        ]);
+    }
+
+    /**
+     * @param list<RiverFeature> $features
+     *
+     * @return list<string|null>
+     */
+    private static function names(array $features): array
+    {
+        return array_map(static fn(RiverFeature $feature): ?string => $feature->name, $features);
     }
 }

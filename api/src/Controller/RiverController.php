@@ -13,6 +13,7 @@ use Jbryn\DistanceCalculator\Geo\Polyline;
 use Jbryn\DistanceCalculator\River\PointTooFarException;
 use Jbryn\DistanceCalculator\River\River;
 use Jbryn\DistanceCalculator\River\RiverCatalogue;
+use Jbryn\DistanceCalculator\River\RiverFeature;
 use Jbryn\DistanceCalculator\River\RiverNotFoundException;
 use Jbryn\DistanceCalculator\River\RiverRepository;
 use Jbryn\DistanceCalculator\River\RiverSummary;
@@ -66,6 +67,7 @@ final class RiverController
             'name' => $river->name,
             'length' => self::meters($river->line->length()),
             'points' => self::points($river->line),
+            'features' => self::features($river->features, 'distanceFromSource'),
         ]);
     }
 
@@ -93,6 +95,7 @@ final class RiverController
             'from' => self::position($section->from),
             'to' => self::position($section->to),
             'points' => self::points($section->line),
+            'features' => self::features($section->features, 'distance'),
         ]);
     }
 
@@ -145,6 +148,26 @@ final class RiverController
             'distanceFromSource' => self::meters($position->distance),
             'offset' => self::meters($position->offset),
         ];
+    }
+
+    /**
+     * @param list<RiverFeature> $features
+     * @param string             $distanceKey what the feature's distance is measured from
+     *
+     * @return list<array<string, mixed>>
+     */
+    private static function features(array $features, string $distanceKey): array
+    {
+        return array_map(
+            static fn(RiverFeature $feature): array => [
+                'kind' => $feature->kind->value,
+                'category' => $feature->kind->category(),
+                'name' => $feature->name,
+                'point' => self::coordinates($feature->point),
+                $distanceKey => self::meters($feature->distance),
+            ],
+            $features,
+        );
     }
 
     /**
