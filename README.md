@@ -1,6 +1,6 @@
-# Distance Calculator
+# Downriver
 
-[![CI](https://github.com/jbryn/distance-calculator/actions/workflows/ci.yml/badge.svg)](https://github.com/jbryn/distance-calculator/actions/workflows/ci.yml)
+[![CI](https://github.com/jbryn/downriver/actions/workflows/ci.yml/badge.svg)](https://github.com/jbryn/downriver/actions/workflows/ci.yml)
 
 A web app for planning kayaking trips. Pick a river and see it on a map; the next steps let you pick a start and a finish and get the distance along the river, following every bend, with the weirs, dams and landing places on the way.
 
@@ -8,7 +8,7 @@ A web app for planning kayaking trips. Pick a river and see it on a map; the nex
 
 ## Status
 
-Work in progress, tracked in the [Kayak river tool v1](https://github.com/jbryn/distance-calculator/milestone/1) milestone with one issue per pull request.
+Work in progress, tracked in the [Kayak river tool v1](https://github.com/jbryn/downriver/milestone/1) milestone with one issue per pull request.
 
 | | |
 |---|---|
@@ -39,8 +39,8 @@ The measurements are checked against official river kilometrage from IMGW-PIB, t
 You need PHP 8.1 or newer with Composer, and Node.js 22 or newer.
 
 ```bash
-git clone https://github.com/jbryn/distance-calculator.git
-cd distance-calculator
+git clone https://github.com/jbryn/downriver.git
+cd downriver
 ```
 
 Start the API (terminal 1):
