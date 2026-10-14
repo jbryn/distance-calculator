@@ -7,7 +7,6 @@ namespace Jbryn\DistanceCalculator;
 use DI\Container;
 use DI\ContainerBuilder;
 use Jbryn\DistanceCalculator\Config\Settings;
-use Jbryn\DistanceCalculator\Controller\DistanceController;
 use Jbryn\DistanceCalculator\Controller\RiverController;
 use Jbryn\DistanceCalculator\Handler\JsonErrorHandler;
 use Jbryn\DistanceCalculator\Middleware\CorsMiddleware;
@@ -36,8 +35,6 @@ final class AppFactory
         $app = SlimAppFactory::createFromContainer($containerBuilder->build());
 
         // Middleware runs in reverse order of registration: the last one added is the outermost
-        $app->addBodyParsingMiddleware();
-
         $errorMiddleware = $app->addErrorMiddleware($settings->debug, $settings->logErrors, $settings->logErrors);
         $errorMiddleware->setDefaultErrorHandler(new JsonErrorHandler($app->getResponseFactory()));
 
@@ -59,8 +56,6 @@ final class AppFactory
 
             return $response->withHeader('Content-Type', 'application/json');
         });
-
-        $app->post('/api/calculate-distance', DistanceController::class . ':calculate');
 
         $app->get('/api/rivers', RiverController::class . ':search');
         $app->get('/api/rivers/{id:[0-9]{1,15}}', RiverController::class . ':show');

@@ -1,6 +1,13 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import AppShell from './components/layout/AppShell.vue'
-import CoordinateForm from './components/CoordinatesForm.vue'
+import RiverDetails from './components/RiverDetails.vue'
+import RiverMap from './components/RiverMap.vue'
+import RiverSearch from './components/RiverSearch.vue'
+import { useRiverStore } from './stores/river'
+
+const store = useRiverStore()
+const { river, status } = storeToRefs(store)
 </script>
 
 <template>
@@ -8,16 +15,12 @@ import CoordinateForm from './components/CoordinatesForm.vue'
     <template #title>Distance Calculator</template>
 
     <template #map>
-      <div
-        class="flex h-full items-center justify-center text-sm text-slate-500 dark:text-slate-400"
-        data-testid="map-placeholder"
-      >
-        Map
-      </div>
+      <RiverMap :river="river" />
     </template>
 
     <template #panel>
-      <CoordinateForm />
+      <RiverSearch v-if="status === 'idle'" @select="store.select" />
+      <RiverDetails v-else @back="store.clear" />
     </template>
   </AppShell>
 </template>

@@ -2,6 +2,11 @@ const byTestId = (id: string) => cy.get(`[data-testid="${id}"]`)
 
 const html = () => cy.get('html')
 
+beforeEach(() => {
+  // Map tiles come from a fixture, not from OpenStreetMap
+  cy.intercept('GET', 'https://tile.openstreetmap.org/**', { fixture: 'tile.png' })
+})
+
 describe('App shell', () => {
   describe('theme', () => {
     beforeEach(() => {
@@ -89,14 +94,11 @@ describe('App shell', () => {
       byTestId('panel-content').should('be.visible')
     })
 
-    it('keeps the form usable inside the sheet', () => {
-      byTestId('latitude-1').type('51.5074')
-      byTestId('longitude-1').type('-0.1278')
-      byTestId('latitude-2').type('48.8566')
-      byTestId('longitude-2').type('2.3522')
-      byTestId('calculate-button').click()
+    it('keeps the river search usable inside the sheet', () => {
+      byTestId('river-query').type('gwda')
+      byTestId('river-option-8974372').click()
 
-      byTestId('distance-result').should('be.visible').and('contain.text', '343.56 kilometers')
+      byTestId('river-name').should('be.visible').and('have.text', 'Gwda')
     })
   })
 })

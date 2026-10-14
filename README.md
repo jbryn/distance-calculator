@@ -17,11 +17,11 @@ Work is tracked in the [Kayak river tool v1](https://github.com/jbryn/distance-c
 - Distances checked against official river kilometrage from IMGW-PIB on 33 stretches between gauging stations: 30 within the reference tolerance (3%, or 6% on difficult reaches), 21 within 0.5%
 - Detection of rivers whose map data has gaps; these are reported and not offered
 - Obstacles (weirs, dams, locks, rapids, waterfalls) and access points (put-ins, slipways, bridges) along a river and on any section of it, each with its distance along the river
-- The original straight-line calculator, in the API and in the web client
+- Web client: search for a river and see it on an OpenStreetMap map, with its length and the number of obstacles and access points; light and dark themes; layout for desktop and phone
 
 **Planned**
 
-- Map interface: search for a river, click a start and a finish, see the section highlighted
+- Section selection: click a start and a finish on the map and see the section highlighted
 - Trip details: kilometers or miles, estimated paddling time, obstacles on the route
 - Shareable links and GPX export
 - Docker setup and a public deployment
@@ -37,7 +37,9 @@ Work is tracked in the [Kayak river tool v1](https://github.com/jbryn/distance-c
 
 ### Frontend
 
-- Vue.js 3 with TypeScript
+- Vue.js 3 with TypeScript, Pinia for state
+- Leaflet with OpenStreetMap tiles for the map
+- Tailwind CSS
 - Vite as build tool
 - Vitest for unit tests
 - Cypress for end-to-end tests
@@ -156,7 +158,7 @@ cd client
 npm run e2e
 ```
 
-Use `npm run e2e:open` to run them interactively in the Cypress app.
+Use `npm run e2e:open` to run them interactively in the Cypress app. Map tiles are served from a fixture during the tests, so they do not load anything from OpenStreetMap.
 
 ## API Endpoints
 
@@ -175,52 +177,6 @@ curl http://localhost:8080/
 ```json
 {
   "status": "API is working!"
-}
-```
-
-### Calculate Distance
-
-**Endpoint:** `POST /api/calculate-distance`
-
-**Example Request Body:**
-
-```json
-{
-  "lat1": 52.229676,
-  "lon1": 21.012229,
-  "lat2": 50.06465,
-  "lon2": 19.94498
-}
-```
-
-Latitudes must be between -90 and 90, longitudes between -180 and 180.
-
-**Test with curl:**
-
-```bash
-curl -X POST http://localhost:8080/api/calculate-distance \
-  -H 'Content-Type: application/json' \
-  -d '{"lat1": 52.229676, "lon1": 21.012229, "lat2": 50.06465, "lon2": 19.94498}'
-```
-
-**Example Response:**
-
-```json
-{
-  "status": "success",
-  "data": {
-    "meters": 251980.37,
-    "kilometers": 251.98
-  }
-}
-```
-
-**Example Error Response (HTTP 400):**
-
-```json
-{
-  "status": "error",
-  "message": "Invalid latitude for lat1. Value must be between -90 and 90 degrees"
 }
 ```
 
