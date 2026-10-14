@@ -12,7 +12,7 @@ const { river, status } = storeToRefs(store)
 
 <template>
   <AppShell>
-    <template #title>Distance Calculator</template>
+    <template #title>Downriver</template>
 
     <template #map>
       <RiverMap :river="river" />

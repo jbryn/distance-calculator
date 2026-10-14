@@ -13,7 +13,7 @@ final class Settings
         'https://overpass.private.coffee/api/interpreter',
     ];
 
-    public const DEFAULT_OVERPASS_USER_AGENT = 'distance-calculator (+https://github.com/jbryn/distance-calculator)';
+    public const DEFAULT_OVERPASS_USER_AGENT = 'downriver (+https://github.com/jbryn/downriver)';
 
     /** The saved map data that ships with the application */
     public const DEFAULT_OVERPASS_CACHE_DIR = __DIR__ . '/../../data/overpass';
