@@ -66,101 +66,50 @@ const formattedDistance = computed(() => {
 </script>
 
 <template>
-  <div class="coordinate-form">
-    <form class="form-container" @submit.prevent="handleSubmit">
-      <CoordinateInput
-        :point-number="1"
-        :coordinates="point1"
-        :errors="point1Errors"
-        :on-blur="() => handleBlur(1)"
-        marker-color="#4B7BF5"
-      />
+  <form data-testid="coordinates-form" novalidate @submit.prevent="handleSubmit">
+    <CoordinateInput
+      :point-number="1"
+      :coordinates="point1"
+      :errors="point1Errors"
+      :on-blur="() => handleBlur(1)"
+      marker-color="#4B7BF5"
+    />
 
-      <CoordinateInput
-        :point-number="2"
-        :coordinates="point2"
-        :errors="point2Errors"
-        :on-blur="() => handleBlur(2)"
-        marker-color="#22C55E"
-      />
+    <CoordinateInput
+      :point-number="2"
+      :coordinates="point2"
+      :errors="point2Errors"
+      :on-blur="() => handleBlur(2)"
+      marker-color="#22C55E"
+    />
 
-      <button type="submit" :disabled="!isFormValid || isLoading" class="calculate-button">
-        {{ isLoading ? 'Calculating...' : 'Calculate Distance' }}
-        <span class="arrow">→</span>
-      </button>
+    <button
+      type="submit"
+      :disabled="!isFormValid || isLoading"
+      class="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-3 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500 dark:disabled:bg-slate-800 dark:disabled:text-slate-500"
+      data-testid="calculate-button"
+    >
+      {{ isLoading ? 'Calculating...' : 'Calculate Distance' }}
+      <span aria-hidden="true">→</span>
+    </button>
 
-      <div v-if="formattedDistance" class="result">
-        <p>
-          Distance: {{ formattedDistance.kilometers }} kilometers ({{ formattedDistance.meters }}
-          meters)
-        </p>
-      </div>
+    <p
+      v-if="formattedDistance"
+      class="mt-4 text-center font-medium"
+      role="status"
+      data-testid="distance-result"
+    >
+      Distance: {{ formattedDistance.kilometers }} kilometers ({{ formattedDistance.meters }}
+      meters)
+    </p>
 
-      <div v-if="apiError" class="error">
-        {{ apiError }}
-      </div>
-    </form>
-  </div>
+    <p
+      v-if="apiError"
+      class="mt-3 text-center text-sm text-red-600 dark:text-red-400"
+      role="alert"
+      data-testid="form-error"
+    >
+      {{ apiError }}
+    </p>
+  </form>
 </template>
-
-<style scoped>
-.coordinate-form {
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.form-container {
-  width: 100%;
-  background: white;
-  border-radius: 16px;
-  box-shadow:
-    0 4px 6px -1px rgb(0 0 0 / 0.1),
-    0 2px 4px -2px rgb(0 0 0 / 0.1);
-  padding: 24px;
-  box-sizing: border-box;
-}
-
-.calculate-button {
-  width: 100%;
-  padding: 16px;
-  background-color: #4b7bf5;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 16px;
-}
-
-.calculate-button:disabled {
-  background-color: #e5e7eb;
-  cursor: not-allowed;
-}
-
-.calculate-button:hover:not(:disabled) {
-  background-color: #3b69e3;
-}
-
-.arrow {
-  margin-left: 8px;
-}
-
-.error {
-  color: #ef4444;
-  font-size: 0.9em;
-  margin-top: 12px;
-  text-align: center;
-}
-
-.result {
-  margin-top: 16px;
-  text-align: center;
-  font-weight: 500;
-  color: black;
-}
-</style>

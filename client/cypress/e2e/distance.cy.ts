@@ -1,11 +1,17 @@
 const API_URL = '**/api/calculate-distance'
 
-const fillPoint = (pointNumber: 1 | 2, latitude: string, longitude: string) => {
-  cy.get(`#lat${pointNumber}`).clear().type(latitude)
-  cy.get(`#lng${pointNumber}`).clear().type(longitude)
+const byTestId = (id: string) => cy.get(`[data-testid="${id}"]`)
+
+const latitude = (pointNumber: 1 | 2) => byTestId(`latitude-${pointNumber}`)
+const longitude = (pointNumber: 1 | 2) => byTestId(`longitude-${pointNumber}`)
+
+const fillPoint = (pointNumber: 1 | 2, lat: string, lng: string) => {
+  latitude(pointNumber).clear().type(lat)
+  longitude(pointNumber).clear().type(lng)
 }
 
-const submitButton = () => cy.get('button[type="submit"]')
+const submitButton = () => byTestId('calculate-button')
+const result = () => byTestId('distance-result')
 
 describe('Distance calculator', () => {
   beforeEach(() => {
@@ -18,7 +24,9 @@ describe('Distance calculator', () => {
       fillPoint(2, '48.8566', '2.3522')
       submitButton().click()
 
-      cy.contains('.result', 'Distance: 343.56 kilometers (343556.06 meters)').should('be.visible')
+      result()
+        .should('be.visible')
+        .and('contain.text', 'Distance: 343.56 kilometers (343556.06 meters)')
     })
 
     it('accepts whole-number coordinates', () => {
@@ -26,7 +34,9 @@ describe('Distance calculator', () => {
       fillPoint(2, '50.0000', '19.0000')
       submitButton().click()
 
-      cy.contains('.result', 'Distance: 262.74 kilometers (262739.82 meters)').should('be.visible')
+      result()
+        .should('be.visible')
+        .and('contain.text', 'Distance: 262.74 kilometers (262739.82 meters)')
     })
 
     it('shows zero distance for identical points', () => {
@@ -34,7 +44,7 @@ describe('Distance calculator', () => {
       fillPoint(2, '51.5074', '-0.1278')
       submitButton().click()
 
-      cy.contains('.result', 'Distance: 0.00 kilometers (0.00 meters)').should('be.visible')
+      result().should('be.visible').and('contain.text', 'Distance: 0.00 kilometers (0.00 meters)')
     })
 
     it('sends the coordinates to the API as numbers', () => {
@@ -68,30 +78,36 @@ describe('Distance calculator', () => {
     })
 
     it('shows an error for a value with too few decimal places', () => {
-      cy.get('#lat1').type('51.5').blur()
+      latitude(1).type('51.5').blur()
 
-      cy.contains('.error', 'Must be a decimal number with 4-6 decimal places').should('be.visible')
+      byTestId('latitude-error-1')
+        .should('be.visible')
+        .and('contain.text', 'Must be a decimal number with 4-6 decimal places')
       submitButton().should('be.disabled')
     })
 
     it('shows an error for an out-of-range latitude', () => {
-      cy.get('#lat1').type('91.0000').blur()
+      latitude(1).type('91.0000').blur()
 
-      cy.contains('.error', 'Latitude must be between -90 and 90 degrees').should('be.visible')
+      byTestId('latitude-error-1')
+        .should('be.visible')
+        .and('contain.text', 'Latitude must be between -90 and 90 degrees')
     })
 
     it('shows an error for an out-of-range longitude', () => {
-      cy.get('#lng1').type('181.0000').blur()
+      longitude(1).type('181.0000').blur()
 
-      cy.contains('.error', 'Longitude must be between -180 and 180 degrees').should('be.visible')
+      byTestId('longitude-error-1')
+        .should('be.visible')
+        .and('contain.text', 'Longitude must be between -180 and 180 degrees')
     })
 
     it('clears the error once the value is corrected', () => {
-      cy.get('#lat1').type('51.5').blur()
-      cy.contains('.error', 'Must be a decimal number').should('be.visible')
+      latitude(1).type('51.5').blur()
+      byTestId('latitude-error-1').should('be.visible')
 
-      cy.get('#lat1').clear().type('51.5074').blur()
-      cy.contains('.error', 'Must be a decimal number').should('not.exist')
+      latitude(1).clear().type('51.5074').blur()
+      byTestId('latitude-error-1').should('not.exist')
     })
   })
 
@@ -108,16 +124,18 @@ describe('Distance calculator', () => {
       })
       submitButton().click()
 
-      cy.contains('.error', 'Failed to calculate distance').should('be.visible')
-      cy.get('.result').should('not.exist')
+      byTestId('form-error')
+        .should('be.visible')
+        .and('contain.text', 'Failed to calculate distance')
+      result().should('not.exist')
     })
 
     it('shows an error when the API is unreachable', () => {
       cy.intercept('POST', API_URL, { forceNetworkError: true })
       submitButton().click()
 
-      cy.get('.form-container > .error').should('be.visible')
-      cy.get('.result').should('not.exist')
+      byTestId('form-error').should('be.visible')
+      result().should('not.exist')
     })
 
     it('shows a loading state while the request is in flight', () => {
@@ -129,7 +147,7 @@ describe('Distance calculator', () => {
       submitButton().click()
 
       submitButton().should('be.disabled').and('contain.text', 'Calculating...')
-      cy.get('.result').should('be.visible')
+      result().should('be.visible')
       submitButton().should('be.enabled').and('contain.text', 'Calculate Distance')
     })
   })

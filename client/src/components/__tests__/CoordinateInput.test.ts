@@ -3,6 +3,8 @@ import { mount } from '@vue/test-utils'
 import CoordinateInput from '../CoordinateInput.vue'
 import type { Coordinates, ValidationErrors } from '../../types/coordinates'
 
+const byTestId = (id: string) => `[data-testid="${id}"]`
+
 describe('CoordinateInput', () => {
   const defaultProps = {
     pointNumber: 1,
@@ -16,24 +18,23 @@ describe('CoordinateInput', () => {
     it('renders with default props', () => {
       const wrapper = mount(CoordinateInput, { props: defaultProps })
 
-      expect(wrapper.find('h3').text()).toBe('Point 1')
-      expect(wrapper.find('.marker').attributes('style')).toContain(
+      expect(wrapper.find(byTestId('point-title-1')).text()).toBe('Point 1')
+      expect(wrapper.find(byTestId('marker-1')).attributes('style')).toContain(
         'background-color: rgb(75, 123, 245)'
       )
-      expect(wrapper.findAll('input')).toHaveLength(2)
+      expect(wrapper.find(byTestId('latitude-1')).exists()).toBe(true)
+      expect(wrapper.find(byTestId('longitude-1')).exists()).toBe(true)
     })
 
     it('displays correct placeholders based on point number', async () => {
       const wrapper = mount(CoordinateInput, { props: defaultProps })
 
-      // Point 1 placeholders
-      expect(wrapper.find('#lat1').attributes('placeholder')).toBe('e.g. 51.5074')
-      expect(wrapper.find('#lng1').attributes('placeholder')).toBe('e.g. -0.1278')
+      expect(wrapper.find(byTestId('latitude-1')).attributes('placeholder')).toBe('e.g. 51.5074')
+      expect(wrapper.find(byTestId('longitude-1')).attributes('placeholder')).toBe('e.g. -0.1278')
 
-      // Test point 2 placeholders
       await wrapper.setProps({ pointNumber: 2 })
-      expect(wrapper.find('#lat2').attributes('placeholder')).toBe('e.g. 48.8566')
-      expect(wrapper.find('#lng2').attributes('placeholder')).toBe('e.g. 2.3522')
+      expect(wrapper.find(byTestId('latitude-2')).attributes('placeholder')).toBe('e.g. 48.8566')
+      expect(wrapper.find(byTestId('longitude-2')).attributes('placeholder')).toBe('e.g. 2.3522')
     })
 
     it('displays validation errors when present', () => {
@@ -47,10 +48,15 @@ describe('CoordinateInput', () => {
         }
       })
 
-      const errors = wrapper.findAll('.error')
-      expect(errors).toHaveLength(2)
-      expect(errors[0].text()).toBe('Invalid latitude')
-      expect(errors[1].text()).toBe('Invalid longitude')
+      expect(wrapper.find(byTestId('latitude-error-1')).text()).toBe('Invalid latitude')
+      expect(wrapper.find(byTestId('longitude-error-1')).text()).toBe('Invalid longitude')
+    })
+
+    it('shows no error messages without errors', () => {
+      const wrapper = mount(CoordinateInput, { props: defaultProps })
+
+      expect(wrapper.find(byTestId('latitude-error-1')).exists()).toBe(false)
+      expect(wrapper.find(byTestId('longitude-error-1')).exists()).toBe(false)
     })
   })
 
@@ -61,8 +67,7 @@ describe('CoordinateInput', () => {
         props: { ...defaultProps, coordinates }
       })
 
-      const latitudeInput = wrapper.find('input[id="lat1"]')
-      await latitudeInput.setValue('51.5074')
+      await wrapper.find(byTestId('latitude-1')).setValue('51.5074')
 
       expect(coordinates.latitude).toBe('51.5074')
     })
@@ -73,8 +78,7 @@ describe('CoordinateInput', () => {
         props: { ...defaultProps, coordinates }
       })
 
-      const longitudeInput = wrapper.find('input[id="lng1"]')
-      await longitudeInput.setValue('-0.1278')
+      await wrapper.find(byTestId('longitude-1')).setValue('-0.1278')
 
       expect(coordinates.longitude).toBe('-0.1278')
     })
@@ -85,12 +89,10 @@ describe('CoordinateInput', () => {
         props: { ...defaultProps, onBlur }
       })
 
-      const inputs = wrapper.findAll('input')
-
-      await inputs[0].trigger('blur')
+      await wrapper.find(byTestId('latitude-1')).trigger('blur')
       expect(onBlur).toHaveBeenCalledTimes(1)
 
-      await inputs[1].trigger('blur')
+      await wrapper.find(byTestId('longitude-1')).trigger('blur')
       expect(onBlur).toHaveBeenCalledTimes(2)
     })
   })
@@ -98,27 +100,29 @@ describe('CoordinateInput', () => {
   describe('accessibility', () => {
     it('has correct input labels and ids', () => {
       const wrapper = mount(CoordinateInput, { props: defaultProps })
-      const inputs = wrapper.findAll('input')
       const labels = wrapper.findAll('label')
 
-      // Check latitude input
-      expect(inputs[0].attributes('id')).toBe('lat1')
+      expect(wrapper.find(byTestId('latitude-1')).attributes('id')).toBe('lat1')
       expect(labels[0].attributes('for')).toBe('lat1')
       expect(labels[0].text()).toBe('Latitude')
 
-      // Check longitude input
-      expect(inputs[1].attributes('id')).toBe('lng1')
+      expect(wrapper.find(byTestId('longitude-1')).attributes('id')).toBe('lng1')
       expect(labels[1].attributes('for')).toBe('lng1')
       expect(labels[1].text()).toBe('Longitude')
     })
 
     it('marks inputs as required', () => {
       const wrapper = mount(CoordinateInput, { props: defaultProps })
-      const inputs = wrapper.findAll('input')
 
-      inputs.forEach((input) => {
-        expect(input.attributes('required')).toBeDefined()
-      })
+      expect(wrapper.find(byTestId('latitude-1')).attributes('required')).toBeDefined()
+      expect(wrapper.find(byTestId('longitude-1')).attributes('required')).toBeDefined()
+    })
+
+    it('groups the two inputs of a point under its title', () => {
+      const wrapper = mount(CoordinateInput, { props: defaultProps })
+
+      expect(wrapper.find(byTestId('point-1')).element.tagName).toBe('FIELDSET')
+      expect(wrapper.find('legend').text()).toBe('Point 1')
     })
   })
 
@@ -128,24 +132,8 @@ describe('CoordinateInput', () => {
         props: { ...defaultProps, markerColor: '#22C55E' }
       })
 
-      expect(wrapper.find('.marker').attributes('style')).toContain(
+      expect(wrapper.find(byTestId('marker-1')).attributes('style')).toContain(
         'background-color: rgb(34, 197, 94)'
-      )
-    })
-
-    it('maintains consistent layout with and without errors', async () => {
-      const wrapper = mount(CoordinateInput, { props: defaultProps })
-      const initialHeight = (wrapper.find('.point-container').element as HTMLElement).style.height
-
-      await wrapper.setProps({
-        errors: {
-          latitude: 'Error message',
-          longitude: 'Error message'
-        }
-      })
-
-      expect((wrapper.find('.point-container').element as HTMLElement).style.height).toBe(
-        initialHeight
       )
     })
   })
