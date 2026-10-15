@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\River;
+namespace Jbryn\Downriver\River;
 
-use Jbryn\DistanceCalculator\Geo\LinePosition;
-use Jbryn\DistanceCalculator\Geo\Polyline;
+use Jbryn\Downriver\Geo\LinePosition;
+use Jbryn\Downriver\Geo\Polyline;
 
 /**
  * A stretch of a river between two positions on it.

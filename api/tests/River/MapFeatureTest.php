@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\River;
+namespace Jbryn\Downriver\Tests\River;
 
-use Jbryn\DistanceCalculator\Geo\Point;
-use Jbryn\DistanceCalculator\River\FeatureKind;
-use Jbryn\DistanceCalculator\River\InvalidRiverDataException;
-use Jbryn\DistanceCalculator\River\MapFeature;
+use Jbryn\Downriver\Geo\Point;
+use Jbryn\Downriver\River\FeatureKind;
+use Jbryn\Downriver\River\InvalidRiverDataException;
+use Jbryn\Downriver\River\MapFeature;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\Overpass;
+namespace Jbryn\Downriver\Tests\Overpass;
 
-use Jbryn\DistanceCalculator\Overpass\OverpassClient;
-use Jbryn\DistanceCalculator\Overpass\OverpassUnavailableException;
+use Jbryn\Downriver\Overpass\OverpassClient;
+use Jbryn\Downriver\Overpass\OverpassUnavailableException;
 
 /**
  * Stands in for the network-backed client: returns a fixed answer or fails, and counts calls.

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\River;
+namespace Jbryn\Downriver\River;
 
 use Closure;
-use Jbryn\DistanceCalculator\Overpass\OverpassClient;
-use Jbryn\DistanceCalculator\Overpass\OverpassUnavailableException;
-use Jbryn\DistanceCalculator\Overpass\QueryCache;
+use Jbryn\Downriver\Overpass\OverpassClient;
+use Jbryn\Downriver\Overpass\OverpassUnavailableException;
+use Jbryn\Downriver\Overpass\QueryCache;
 
 /**
  * Downloads everything the application needs to know about a river and saves it.

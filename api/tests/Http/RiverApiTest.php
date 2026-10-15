@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\Http;
+namespace Jbryn\Downriver\Tests\Http;
 
-use Jbryn\DistanceCalculator\Config\Settings;
-use Jbryn\DistanceCalculator\Overpass\OverpassClient;
-use Jbryn\DistanceCalculator\Overpass\QueryCache;
-use Jbryn\DistanceCalculator\River\RiverCatalogue;
-use Jbryn\DistanceCalculator\River\RiverRelation;
-use Jbryn\DistanceCalculator\River\RiverSummary;
-use Jbryn\DistanceCalculator\Tests\Overpass\TemporaryDirectory;
-use Jbryn\DistanceCalculator\Tests\River\RiverFixtures;
+use Jbryn\Downriver\Config\Settings;
+use Jbryn\Downriver\Overpass\OverpassClient;
+use Jbryn\Downriver\Overpass\QueryCache;
+use Jbryn\Downriver\River\RiverCatalogue;
+use Jbryn\Downriver\River\RiverRelation;
+use Jbryn\Downriver\River\RiverSummary;
+use Jbryn\Downriver\Tests\Overpass\TemporaryDirectory;
+use Jbryn\Downriver\Tests\River\RiverFixtures;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;

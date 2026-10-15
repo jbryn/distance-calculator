@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\Config;
+namespace Jbryn\Downriver\Tests\Config;
 
-use Jbryn\DistanceCalculator\Config\Settings;
+use Jbryn\Downriver\Config\Settings;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

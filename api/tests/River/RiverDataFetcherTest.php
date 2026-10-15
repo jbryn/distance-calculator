@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\River;
+namespace Jbryn\Downriver\Tests\River;
 
-use Jbryn\DistanceCalculator\Overpass\OverpassClient;
-use Jbryn\DistanceCalculator\Overpass\OverpassUnavailableException;
-use Jbryn\DistanceCalculator\Overpass\QueryCache;
-use Jbryn\DistanceCalculator\River\MapFeature;
-use Jbryn\DistanceCalculator\River\RiverDataFetcher;
-use Jbryn\DistanceCalculator\River\RiverRelation;
-use Jbryn\DistanceCalculator\Tests\Overpass\TemporaryDirectory;
+use Jbryn\Downriver\Overpass\OverpassClient;
+use Jbryn\Downriver\Overpass\OverpassUnavailableException;
+use Jbryn\Downriver\Overpass\QueryCache;
+use Jbryn\Downriver\River\MapFeature;
+use Jbryn\Downriver\River\RiverDataFetcher;
+use Jbryn\Downriver\River\RiverRelation;
+use Jbryn\Downriver\Tests\Overpass\TemporaryDirectory;
 use PHPUnit\Framework\TestCase;
 
 class RiverDataFetcherTest extends TestCase

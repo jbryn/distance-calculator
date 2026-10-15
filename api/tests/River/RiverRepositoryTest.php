@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\River;
+namespace Jbryn\Downriver\Tests\River;
 
-use Jbryn\DistanceCalculator\Config\Settings;
-use Jbryn\DistanceCalculator\Overpass\OverpassClient;
-use Jbryn\DistanceCalculator\Overpass\OverpassUnavailableException;
-use Jbryn\DistanceCalculator\River\FeatureKind;
-use Jbryn\DistanceCalculator\River\FeatureLocator;
-use Jbryn\DistanceCalculator\River\MapFeature;
-use Jbryn\DistanceCalculator\River\RiverCatalogue;
-use Jbryn\DistanceCalculator\River\RiverFeature;
-use Jbryn\DistanceCalculator\River\RiverNotFoundException;
-use Jbryn\DistanceCalculator\River\RiverRelation;
-use Jbryn\DistanceCalculator\River\RiverRepository;
-use Jbryn\DistanceCalculator\River\RiverStitcher;
-use Jbryn\DistanceCalculator\River\RiverSummary;
-use Jbryn\DistanceCalculator\River\RiverUnavailableException;
-use Jbryn\DistanceCalculator\Tests\Overpass\FakeOverpassClient;
+use Jbryn\Downriver\Config\Settings;
+use Jbryn\Downriver\Overpass\OverpassClient;
+use Jbryn\Downriver\Overpass\OverpassUnavailableException;
+use Jbryn\Downriver\River\FeatureKind;
+use Jbryn\Downriver\River\FeatureLocator;
+use Jbryn\Downriver\River\MapFeature;
+use Jbryn\Downriver\River\RiverCatalogue;
+use Jbryn\Downriver\River\RiverFeature;
+use Jbryn\Downriver\River\RiverNotFoundException;
+use Jbryn\Downriver\River\RiverRelation;
+use Jbryn\Downriver\River\RiverRepository;
+use Jbryn\Downriver\River\RiverStitcher;
+use Jbryn\Downriver\River\RiverSummary;
+use Jbryn\Downriver\River\RiverUnavailableException;
+use Jbryn\Downriver\Tests\Overpass\FakeOverpassClient;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

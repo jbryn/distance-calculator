@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\River;
+namespace Jbryn\Downriver\River;
 
 use InvalidArgumentException;
-use Jbryn\DistanceCalculator\Geo\Point;
+use Jbryn\Downriver\Geo\Point;
 
 /**
  * One of the separate lines a river is stored as in OpenStreetMap (a "way").

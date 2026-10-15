@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Config;
+namespace Jbryn\Downriver\Config;
 
 final class Settings
 {

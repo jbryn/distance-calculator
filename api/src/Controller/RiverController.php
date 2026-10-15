@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Controller;
+namespace Jbryn\Downriver\Controller;
 
 use InvalidArgumentException;
-use Jbryn\DistanceCalculator\Exception\HttpServiceUnavailableException;
-use Jbryn\DistanceCalculator\Exception\HttpUnprocessableEntityException;
-use Jbryn\DistanceCalculator\Geo\LinePosition;
-use Jbryn\DistanceCalculator\Geo\Point;
-use Jbryn\DistanceCalculator\Geo\Polyline;
-use Jbryn\DistanceCalculator\River\PointTooFarException;
-use Jbryn\DistanceCalculator\River\River;
-use Jbryn\DistanceCalculator\River\RiverCatalogue;
-use Jbryn\DistanceCalculator\River\RiverFeature;
-use Jbryn\DistanceCalculator\River\RiverNotFoundException;
-use Jbryn\DistanceCalculator\River\RiverRepository;
-use Jbryn\DistanceCalculator\River\RiverSummary;
-use Jbryn\DistanceCalculator\River\RiverUnavailableException;
+use Jbryn\Downriver\Exception\HttpServiceUnavailableException;
+use Jbryn\Downriver\Exception\HttpUnprocessableEntityException;
+use Jbryn\Downriver\Geo\LinePosition;
+use Jbryn\Downriver\Geo\Point;
+use Jbryn\Downriver\Geo\Polyline;
+use Jbryn\Downriver\River\PointTooFarException;
+use Jbryn\Downriver\River\River;
+use Jbryn\Downriver\River\RiverCatalogue;
+use Jbryn\Downriver\River\RiverFeature;
+use Jbryn\Downriver\River\RiverNotFoundException;
+use Jbryn\Downriver\River\RiverRepository;
+use Jbryn\Downriver\River\RiverSummary;
+use Jbryn\Downriver\River\RiverUnavailableException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;

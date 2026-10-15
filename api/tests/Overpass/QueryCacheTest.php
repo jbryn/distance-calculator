@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\Overpass;
+namespace Jbryn\Downriver\Tests\Overpass;
 
-use Jbryn\DistanceCalculator\Overpass\QueryCache;
+use Jbryn\Downriver\Overpass\QueryCache;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

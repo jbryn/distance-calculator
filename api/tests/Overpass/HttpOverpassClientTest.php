@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\Overpass;
+namespace Jbryn\Downriver\Tests\Overpass;
 
 use GuzzleHttp\Psr7\HttpFactory;
 use InvalidArgumentException;
-use Jbryn\DistanceCalculator\Overpass\HttpOverpassClient;
-use Jbryn\DistanceCalculator\Overpass\OverpassUnavailableException;
+use Jbryn\Downriver\Overpass\HttpOverpassClient;
+use Jbryn\Downriver\Overpass\OverpassUnavailableException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

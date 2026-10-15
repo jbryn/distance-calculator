@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Overpass;
+namespace Jbryn\Downriver\Overpass;
 
 /**
  * Never reaches the network. Wrapped in a cache, it makes the application answer

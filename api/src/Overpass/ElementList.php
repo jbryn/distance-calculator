@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Overpass;
+namespace Jbryn\Downriver\Overpass;
 
 /**
  * Checks that decoded JSON has the shape of an Overpass "elements" list.

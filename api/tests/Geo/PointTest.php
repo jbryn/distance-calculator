@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\Geo;
+namespace Jbryn\Downriver\Tests\Geo;
 
 use InvalidArgumentException;
-use Jbryn\DistanceCalculator\Geo\Point;
+use Jbryn\Downriver\Geo\Point;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\River;
+namespace Jbryn\Downriver\Tests\River;
 
-use Jbryn\DistanceCalculator\Config\Settings;
-use Jbryn\DistanceCalculator\River\RiverCatalogue;
-use Jbryn\DistanceCalculator\River\RiverSummary;
-use Jbryn\DistanceCalculator\Tests\Overpass\TemporaryDirectory;
+use Jbryn\Downriver\Config\Settings;
+use Jbryn\Downriver\River\RiverCatalogue;
+use Jbryn\Downriver\River\RiverSummary;
+use Jbryn\Downriver\Tests\Overpass\TemporaryDirectory;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;

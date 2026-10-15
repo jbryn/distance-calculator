@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\Geo;
+namespace Jbryn\Downriver\Tests\Geo;
 
-use Jbryn\DistanceCalculator\Geo\LinePosition;
-use Jbryn\DistanceCalculator\Geo\Point;
-use Jbryn\DistanceCalculator\Geo\Polyline;
-use Jbryn\DistanceCalculator\Tests\River\RiverFixtures;
+use Jbryn\Downriver\Geo\LinePosition;
+use Jbryn\Downriver\Geo\Point;
+use Jbryn\Downriver\Geo\Polyline;
+use Jbryn\Downriver\Tests\River\RiverFixtures;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
