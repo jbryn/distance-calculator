@@ -27,3 +27,8 @@
 .dark .leaflet-container {
   background: var(--color-slate-800);
 }
+
+/* While a river is shown, clicking the map places a point on it */
+.map-picking .leaflet-grab {
+  cursor: crosshair;
+}

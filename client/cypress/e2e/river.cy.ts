@@ -82,6 +82,17 @@ describe('Choosing a river', () => {
     cy.get('path.river-line').should('not.exist')
   })
 
+  it('keeps the page the size of the window once a river is shown', () => {
+    byTestId(`river-option-${GWDA}`).click()
+    cy.get('path.river-line').should('exist')
+
+    // The map must keep Leaflet's own classes, which clip it to its box
+    cy.get('.leaflet-container').should('exist')
+    cy.document().should((document) => {
+      expect(document.documentElement.scrollHeight).to.equal(document.documentElement.clientHeight)
+    })
+  })
+
   it('credits OpenStreetMap on the map', () => {
     cy.get('.leaflet-control-attribution').should('contain.text', 'OpenStreetMap')
   })
