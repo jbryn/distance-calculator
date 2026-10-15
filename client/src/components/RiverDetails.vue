@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRiverStore } from '../stores/river'
+import SectionPanel from './SectionPanel.vue'
 
 const emit = defineEmits<{ back: [] }>()
 
@@ -68,6 +69,8 @@ const accessPoints = computed(
           <dd class="font-semibold" data-testid="river-access-points">{{ accessPoints }}</dd>
         </div>
       </dl>
+
+      <SectionPanel />
     </template>
   </section>
 </template>

@@ -1,5 +1,5 @@
 import { vi } from 'vitest'
-import type { River } from '../types/river'
+import type { LatLng, River, Section } from '../types/river'
 
 export const jsonResponse = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } })
@@ -82,3 +82,14 @@ export const flushPromises = async () => {
     await new Promise((resolve) => setImmediate(resolve))
   }
 }
+
+/** A section of the Gwda as the API would describe it */
+export const gwdaSection = (from: LatLng, to: LatLng, length = 1000): Section => ({
+  river: { id: gwda.id, name: gwda.name },
+  length,
+  downstream: true,
+  from: { point: from, distanceFromSource: 1000, offset: 10 },
+  to: { point: to, distanceFromSource: 1000 + length, offset: 10 },
+  points: [from, to],
+  features: []
+})
