@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\River;
+namespace Jbryn\Downriver\River;
 
-use Jbryn\DistanceCalculator\Geo\Polyline;
+use Jbryn\Downriver\Geo\Polyline;
 
 /**
  * Works out where along a river each nearby map feature lies.

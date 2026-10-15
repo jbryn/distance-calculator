@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\Overpass;
+namespace Jbryn\Downriver\Tests\Overpass;
 
 /**
  * Gives a test its own empty directory and removes it afterwards.

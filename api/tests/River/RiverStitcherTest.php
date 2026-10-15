@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\River;
+namespace Jbryn\Downriver\Tests\River;
 
 use InvalidArgumentException;
-use Jbryn\DistanceCalculator\Geo\Point;
-use Jbryn\DistanceCalculator\River\Piece;
-use Jbryn\DistanceCalculator\River\RiverStitcher;
-use Jbryn\DistanceCalculator\River\StitchedRiver;
+use Jbryn\Downriver\Geo\Point;
+use Jbryn\Downriver\River\Piece;
+use Jbryn\Downriver\River\RiverStitcher;
+use Jbryn\Downriver\River\StitchedRiver;
 use PHPUnit\Framework\TestCase;
 
 /**

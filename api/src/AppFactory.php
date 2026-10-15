@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator;
+namespace Jbryn\Downriver;
 
 use DI\Container;
 use DI\ContainerBuilder;
-use Jbryn\DistanceCalculator\Config\Settings;
-use Jbryn\DistanceCalculator\Controller\RiverController;
-use Jbryn\DistanceCalculator\Handler\JsonErrorHandler;
-use Jbryn\DistanceCalculator\Middleware\CorsMiddleware;
+use Jbryn\Downriver\Config\Settings;
+use Jbryn\Downriver\Controller\RiverController;
+use Jbryn\Downriver\Handler\JsonErrorHandler;
+use Jbryn\Downriver\Middleware\CorsMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;

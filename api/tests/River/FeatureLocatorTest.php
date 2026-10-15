@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\River;
+namespace Jbryn\Downriver\Tests\River;
 
-use Jbryn\DistanceCalculator\Geo\Point;
-use Jbryn\DistanceCalculator\Geo\Polyline;
-use Jbryn\DistanceCalculator\River\FeatureKind;
-use Jbryn\DistanceCalculator\River\FeatureLocator;
-use Jbryn\DistanceCalculator\River\MapFeature;
-use Jbryn\DistanceCalculator\River\RiverFeature;
+use Jbryn\Downriver\Geo\Point;
+use Jbryn\Downriver\Geo\Polyline;
+use Jbryn\Downriver\River\FeatureKind;
+use Jbryn\Downriver\River\FeatureLocator;
+use Jbryn\Downriver\River\MapFeature;
+use Jbryn\Downriver\River\RiverFeature;
 use PHPUnit\Framework\TestCase;
 
 /**

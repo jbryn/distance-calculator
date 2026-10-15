@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\River;
+namespace Jbryn\Downriver\River;
 
-use Jbryn\DistanceCalculator\Overpass\OverpassClient;
-use Jbryn\DistanceCalculator\Overpass\OverpassUnavailableException;
+use Jbryn\Downriver\Overpass\OverpassClient;
+use Jbryn\Downriver\Overpass\OverpassUnavailableException;
 
 /**
  * Turns a river from the catalogue into a line that can be measured.

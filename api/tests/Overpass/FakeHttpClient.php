@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\Overpass;
+namespace Jbryn\Downriver\Tests\Overpass;
 
 use GuzzleHttp\Psr7\Response;
 use LogicException;

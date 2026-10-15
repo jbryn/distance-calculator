@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Dotenv\Dotenv;
-use Jbryn\DistanceCalculator\AppFactory;
-use Jbryn\DistanceCalculator\Config\Settings;
+use Jbryn\Downriver\AppFactory;
+use Jbryn\Downriver\Config\Settings;
 
 require __DIR__ . '/../vendor/autoload.php';
 

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\River;
+namespace Jbryn\Downriver\River;
 
-use Jbryn\DistanceCalculator\Geo\Polyline;
+use Jbryn\Downriver\Geo\Polyline;
 
 /**
  * The outcome of joining a river's pieces: one line, and an account of what did not fit.

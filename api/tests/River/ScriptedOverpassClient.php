@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\River;
+namespace Jbryn\Downriver\Tests\River;
 
-use Jbryn\DistanceCalculator\Overpass\OverpassClient;
-use Jbryn\DistanceCalculator\Overpass\OverpassUnavailableException;
+use Jbryn\Downriver\Overpass\OverpassClient;
+use Jbryn\Downriver\Overpass\OverpassUnavailableException;
 use LogicException;
 
 /**

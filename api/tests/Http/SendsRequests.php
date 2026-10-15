@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\Http;
+namespace Jbryn\Downriver\Tests\Http;
 
-use Jbryn\DistanceCalculator\AppFactory;
-use Jbryn\DistanceCalculator\Config\Settings;
+use Jbryn\Downriver\AppFactory;
+use Jbryn\Downriver\Config\Settings;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Psr7\Factory\ServerRequestFactory;
 

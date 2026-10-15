@@ -4,12 +4,12 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "Jbryn\\DistanceCalculator\\": "src/"
+            "Jbryn\\Downriver\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Jbryn\\DistanceCalculator\\Tests\\": "tests/"
+            "Jbryn\\Downriver\\Tests\\": "tests/"
         }
     },
     "authors": [

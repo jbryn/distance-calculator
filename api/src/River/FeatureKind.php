@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\River;
+namespace Jbryn\Downriver\River;
 
 /**
  * The kinds of places along a river that matter to a paddler.

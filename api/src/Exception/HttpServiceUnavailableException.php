@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Exception;
+namespace Jbryn\Downriver\Exception;
 
 use Slim\Exception\HttpSpecializedException;
 

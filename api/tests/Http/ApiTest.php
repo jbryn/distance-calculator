@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\Http;
+namespace Jbryn\Downriver\Tests\Http;
 
-use Jbryn\DistanceCalculator\Config\Settings;
-use Jbryn\DistanceCalculator\Overpass\OverpassClient;
+use Jbryn\Downriver\Config\Settings;
+use Jbryn\Downriver\Overpass\OverpassClient;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;

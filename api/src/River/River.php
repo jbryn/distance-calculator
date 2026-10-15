@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\River;
+namespace Jbryn\Downriver\River;
 
-use Jbryn\DistanceCalculator\Geo\Point;
-use Jbryn\DistanceCalculator\Geo\Polyline;
+use Jbryn\Downriver\Geo\Point;
+use Jbryn\Downriver\Geo\Polyline;
 
 /**
  * A river ready to be measured: one unbroken line from source to mouth.

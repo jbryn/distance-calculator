@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Geo;
+namespace Jbryn\Downriver\Geo;
 
 /**
  * The result of snapping a point to a line.

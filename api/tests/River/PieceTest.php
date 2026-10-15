@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\River;
+namespace Jbryn\Downriver\Tests\River;
 
 use InvalidArgumentException;
-use Jbryn\DistanceCalculator\Geo\Point;
-use Jbryn\DistanceCalculator\River\Piece;
+use Jbryn\Downriver\Geo\Point;
+use Jbryn\Downriver\River\Piece;
 use PHPUnit\Framework\TestCase;
 
 class PieceTest extends TestCase

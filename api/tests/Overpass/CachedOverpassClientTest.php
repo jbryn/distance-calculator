@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\Overpass;
+namespace Jbryn\Downriver\Tests\Overpass;
 
-use Jbryn\DistanceCalculator\Overpass\CachedOverpassClient;
-use Jbryn\DistanceCalculator\Overpass\OfflineOverpassClient;
-use Jbryn\DistanceCalculator\Overpass\OverpassUnavailableException;
-use Jbryn\DistanceCalculator\Overpass\QueryCache;
+use Jbryn\Downriver\Overpass\CachedOverpassClient;
+use Jbryn\Downriver\Overpass\OfflineOverpassClient;
+use Jbryn\Downriver\Overpass\OverpassUnavailableException;
+use Jbryn\Downriver\Overpass\QueryCache;
 use PHPUnit\Framework\TestCase;
 
 class CachedOverpassClientTest extends TestCase

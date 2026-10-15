@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\River;
+namespace Jbryn\Downriver\Tests\River;
 
-use Jbryn\DistanceCalculator\Overpass\OverpassClient;
-use Jbryn\DistanceCalculator\Overpass\OverpassUnavailableException;
-use Jbryn\DistanceCalculator\Overpass\QueryCache;
-use Jbryn\DistanceCalculator\River\RiverRelation;
-use Jbryn\DistanceCalculator\River\RiverStitcher;
-use Jbryn\DistanceCalculator\River\StitchedRiver;
+use Jbryn\Downriver\Overpass\OverpassClient;
+use Jbryn\Downriver\Overpass\OverpassUnavailableException;
+use Jbryn\Downriver\Overpass\QueryCache;
+use Jbryn\Downriver\River\RiverRelation;
+use Jbryn\Downriver\River\RiverStitcher;
+use Jbryn\Downriver\River\StitchedRiver;
 
 /**
  * Real rivers saved in tests/fixtures/overpass, read the way the application reads them offline.

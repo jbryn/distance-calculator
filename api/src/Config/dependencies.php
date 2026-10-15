@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\HttpFactory;
-use Jbryn\DistanceCalculator\Config\Settings;
-use Jbryn\DistanceCalculator\Overpass\CachedOverpassClient;
-use Jbryn\DistanceCalculator\Overpass\HttpOverpassClient;
-use Jbryn\DistanceCalculator\Overpass\OfflineOverpassClient;
-use Jbryn\DistanceCalculator\Overpass\OverpassClient;
-use Jbryn\DistanceCalculator\Overpass\QueryCache;
-use Jbryn\DistanceCalculator\River\RiverCatalogue;
+use Jbryn\Downriver\Config\Settings;
+use Jbryn\Downriver\Overpass\CachedOverpassClient;
+use Jbryn\Downriver\Overpass\HttpOverpassClient;
+use Jbryn\Downriver\Overpass\OfflineOverpassClient;
+use Jbryn\Downriver\Overpass\OverpassClient;
+use Jbryn\Downriver\Overpass\QueryCache;
+use Jbryn\Downriver\River\RiverCatalogue;
 
 return [
     RiverCatalogue::class => static fn(Settings $settings): RiverCatalogue => RiverCatalogue::fromFile(

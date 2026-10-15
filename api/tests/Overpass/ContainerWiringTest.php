@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Jbryn\DistanceCalculator\Tests\Overpass;
+namespace Jbryn\Downriver\Tests\Overpass;
 
-use Jbryn\DistanceCalculator\AppFactory;
-use Jbryn\DistanceCalculator\Config\Settings;
-use Jbryn\DistanceCalculator\Overpass\CachedOverpassClient;
-use Jbryn\DistanceCalculator\Overpass\OverpassClient;
-use Jbryn\DistanceCalculator\Overpass\OverpassUnavailableException;
-use Jbryn\DistanceCalculator\Overpass\QueryCache;
+use Jbryn\Downriver\AppFactory;
+use Jbryn\Downriver\Config\Settings;
+use Jbryn\Downriver\Overpass\CachedOverpassClient;
+use Jbryn\Downriver\Overpass\OverpassClient;
+use Jbryn\Downriver\Overpass\OverpassUnavailableException;
+use Jbryn\Downriver\Overpass\QueryCache;
 use PHPUnit\Framework\TestCase;
 
 /**
